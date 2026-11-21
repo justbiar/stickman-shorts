@@ -1,0 +1,92 @@
+{
+ "title": "The first deadline",
+ "style": "a3-cave",
+ "duration": 8,
+ "cast": {
+  "boss": {
+   "x": 340,
+   "size": 640,
+   "look": "right",
+   "spec": {
+    "shirt": "#8a5a2a",
+    "beard": "full",
+    "beardColor": "#3a2414"
+   }
+  },
+  "worker": {
+   "x": 760,
+   "size": 600,
+   "look": "left"
+  }
+ },
+ "props": {
+  "fire": {
+   "type": "fire",
+   "x": 940,
+   "y": 1520,
+   "size": 220
+  },
+  "rock": {
+   "type": "rock",
+   "x": 610,
+   "y": 1500,
+   "size": 300
+  },
+  "sign": {
+   "type": "sign",
+   "x": 110,
+   "y": 1500,
+   "size": 280,
+   "o": {
+    "text": "BY SUNSET",
+    "font": "\"Marker Felt\", sans-serif"
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "do": {
+    "boss": "crossArms smug right",
+    "worker": "idle neutral left"
+   },
+   "caption": "Even cavemen had *deadlines*"
+  },
+  {
+   "t": 2.0,
+   "do": {
+    "boss": "point angry right"
+   },
+   "cam": {
+    "x": 380,
+    "y": 960,
+    "zoom": 1.15
+   }
+  },
+  {
+   "t": 3.4,
+   "cam": {
+    "x": 640,
+    "y": 960,
+    "zoom": 1.1
+   },
+   "do": {
+    "worker": "carry tired left"
+   },
+   "caption": "Deadline: *sunset*"
+  },
+  {
+   "t": 5.4,
+   "do": {
+    "worker": "slump cry front",
+    "boss": "laugh evil right"
+   },
+   "cam": {
+    "x": 540,
+    "y": 960,
+    "zoom": 1
+   },
+   "caption": "Some things never *change*."
+  }
+ ]
+}

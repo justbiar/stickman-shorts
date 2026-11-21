@@ -1,0 +1,93 @@
+{
+ "title": "Chased by a cloud",
+ "style": "a7-rubber",
+ "duration": 8,
+ "cast": {
+  "me": {
+   "x": 260,
+   "size": 600,
+   "look": "right",
+   "act": "walk",
+   "face": "happy"
+  }
+ },
+ "props": {
+  "cloud": {
+   "type": "cloud",
+   "x": 260,
+   "y": 640,
+   "size": 300,
+   "pop": false,
+   "o": {
+    "rain": true
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "move": {
+    "me": [
+     520,
+     1500,
+     2,
+     "linear"
+    ],
+    "cloud": [
+     520,
+     640,
+     2.2
+    ]
+   },
+   "caption": "Some days the cloud *follows* you."
+  },
+  {
+   "t": 2.0,
+   "do": {
+    "me": "run scared right"
+   },
+   "move": {
+    "me": [
+     900,
+     1500,
+     1.4,
+     "linear"
+    ],
+    "cloud": [
+     900,
+     640,
+     1.6
+    ]
+   },
+   "set": {
+    "cloud": {
+     "angry": true
+    }
+   },
+   "cam": {
+    "x": 700,
+    "y": 960,
+    "zoom": 1,
+    "ease": 1.4
+   }
+  },
+  {
+   "t": 3.6,
+   "do": {
+    "me": "shrug tired left"
+   }
+  },
+  {
+   "t": 4.8,
+   "do": {
+    "me": "dance joy front"
+   },
+   "caption": "Fine. *Dance* in it.",
+   "set": {
+    "cloud": {
+     "angry": false
+    }
+   }
+  }
+ ]
+}

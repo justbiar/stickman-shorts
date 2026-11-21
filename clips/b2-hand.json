@@ -1,0 +1,102 @@
+{
+ "title": "Why trying to sleep keeps you awake",
+ "style": "b2-hand",
+ "duration": 8,
+ "cast": {
+  "me": {
+   "x": 820,
+   "y": 1350,
+   "size": 520,
+   "act": "lie",
+   "face": "tired",
+   "look": "right"
+  }
+ },
+ "props": {
+  "bed": {
+   "type": "bed",
+   "x": 520,
+   "y": 1500,
+   "size": 520,
+   "o": {
+    "color": "#8aa8d8"
+   }
+  },
+  "z1": {
+   "type": "thought",
+   "x": 600,
+   "y": 980,
+   "size": 220,
+   "hidden": true,
+   "o": {
+    "text": "sleep",
+    "font": "\"Noteworthy\", sans-serif"
+   }
+  },
+  "z2": {
+   "type": "thought",
+   "x": 560,
+   "y": 740,
+   "size": 360,
+   "hidden": true,
+   "o": {
+    "text": "SLEEP!!",
+    "font": "\"Noteworthy\", sans-serif"
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "The harder you *try* to sleep..."
+  },
+  {
+   "t": 1.4,
+   "show": [
+    "z1"
+   ],
+   "do": {
+    "me": "lie worried"
+   }
+  },
+  {
+   "t": 2.8,
+   "hide": [
+    "z1"
+   ],
+   "show": [
+    "z2"
+   ],
+   "do": {
+    "me": "lie scared"
+   },
+   "caption": "...the *louder* your mind gets",
+   "cam": {
+    "x": 540,
+    "y": 1100,
+    "zoom": 1.2
+   }
+  },
+  {
+   "t": 4.8,
+   "hide": [
+    "z2"
+   ],
+   "cam": {
+    "x": 540,
+    "y": 960,
+    "zoom": 1
+   },
+   "do": {
+    "me": "lie neutral"
+   },
+   "caption": "Stop *trying*. Just rest."
+  },
+  {
+   "t": 6.2,
+   "do": {
+    "me": "sleep sleepy"
+   }
+  }
+ ]
+}

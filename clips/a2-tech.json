@@ -1,0 +1,105 @@
+{
+ "title": "Let the agent do it",
+ "style": "a2-tech",
+ "duration": 8,
+ "cast": {
+  "me": {
+   "x": 400,
+   "size": 600,
+   "act": "type",
+   "face": "tired",
+   "look": "right"
+  }
+ },
+ "props": {
+  "desk": {
+   "type": "desk",
+   "x": 520,
+   "y": 1500,
+   "size": 420,
+   "o": {
+    "laptop": true
+   }
+  },
+  "p1": {
+   "type": "panel",
+   "x": 780,
+   "y": 720,
+   "size": 360,
+   "hidden": true,
+   "o": {
+    "text": "AI AGENT"
+   }
+  },
+  "p2": {
+   "type": "panel",
+   "x": 330,
+   "y": 560,
+   "size": 280,
+   "hidden": true,
+   "o": {
+    "text": "REPORT DONE"
+   }
+  },
+  "p3": {
+   "type": "panel",
+   "x": 760,
+   "y": 360,
+   "size": 260,
+   "hidden": true,
+   "o": {
+    "text": "EMAILS SENT"
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "Still doing it *by hand*?"
+  },
+  {
+   "t": 2.2,
+   "show": [
+    "p1"
+   ],
+   "do": {
+    "me": "stand surprised right"
+   }
+  },
+  {
+   "t": 3.4,
+   "move": {
+    "me": [
+     330,
+     1500,
+     0.6
+    ]
+   },
+   "do": {
+    "me": "point excited right"
+   },
+   "show": [
+    "p2"
+   ],
+   "caption": "Let the *agent* do the boring part"
+  },
+  {
+   "t": 4.6,
+   "show": [
+    "p3"
+   ],
+   "cam": {
+    "x": 560,
+    "y": 900,
+    "zoom": 0.95
+   }
+  },
+  {
+   "t": 6.0,
+   "do": {
+    "me": "cheer joy front"
+   },
+   "caption": "You keep the *ideas*"
+  }
+ ]
+}

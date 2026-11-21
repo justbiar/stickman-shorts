@@ -1,0 +1,121 @@
+{
+ "title": "The man who sold the Eiffel Tower",
+ "style": "b6-meme",
+ "duration": 8,
+ "cast": {
+  "con": {
+   "x": 360,
+   "size": 600,
+   "look": "right",
+   "act": "present",
+   "face": "smug",
+   "spec": {
+    "outfit": "suit",
+    "coat": "#2a2a3a",
+    "hat": "fedora",
+    "beard": "mustache",
+    "beardColor": "#2a1e1a"
+   }
+  },
+  "buyer": {
+   "x": 700,
+   "size": 580,
+   "look": "left",
+   "act": "idle",
+   "face": "excited",
+   "spec": {
+    "shirt": "#d8b07a",
+    "hat": "cap",
+    "hatColor": "#6a5a4a"
+   }
+  }
+ },
+ "props": {
+  "sale": {
+   "type": "sign",
+   "x": 990,
+   "y": 1500,
+   "size": 360,
+   "o": {
+    "text": "FOR SALE",
+    "font": "\"Chalkboard SE\", sans-serif"
+   }
+  },
+  "cash": {
+   "type": "bill",
+   "x": 700,
+   "y": 1150,
+   "size": 240,
+   "hidden": true,
+   "o": {
+    "text": "$$$"
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "1925: a man *sold* the Eiffel Tower."
+  },
+  {
+   "t": 2.2,
+   "show": [
+    "cash"
+   ],
+   "move": {
+    "cash": [
+     430,
+     1150,
+     1.0
+    ]
+   },
+   "do": {
+    "buyer": "hold joy left",
+    "con": "hold smirk right"
+   },
+   "caption": "to a scrap metal dealer."
+  },
+  {
+   "t": 3.9,
+   "hide": [
+    "cash"
+   ],
+   "do": {
+    "con": "run joy left"
+   },
+   "move": {
+    "con": [
+     -300,
+     1500,
+     1.4,
+     "linear"
+    ]
+   },
+   "cam": {
+    "x": 440,
+    "y": 960,
+    "zoom": 1.05
+   }
+  },
+  {
+   "t": 5.0,
+   "do": {
+    "buyer": "idle confused left"
+   },
+   "cam": {
+    "x": 760,
+    "y": 950,
+    "zoom": 1.3
+   }
+  },
+  {
+   "t": 6.0,
+   "caption": "Then he tried it *again*.",
+   "cam": {
+    "x": 540,
+    "y": 960,
+    "zoom": 1
+   }
+  }
+ ]
+}

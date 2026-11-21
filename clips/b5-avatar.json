@@ -1,0 +1,118 @@
+{
+ "title": "Why bills feel heavier",
+ "style": "b5-avatar",
+ "duration": 8,
+ "cast": {
+  "host": {
+   "x": 200,
+   "y": 760,
+   "size": 330,
+   "act": "talk",
+   "face": "smug",
+   "spec": {
+    "hat": "headband",
+    "hatColor": "#d0302a",
+    "glasses": true
+   }
+  },
+  "me": {
+   "x": 760,
+   "size": 560,
+   "look": "left",
+   "act": "idle",
+   "face": "neutral"
+  }
+ },
+ "props": {
+  "frame": {
+   "type": "frame",
+   "x": 200,
+   "y": 600,
+   "size": 360,
+   "pop": false,
+   "o": {
+    "ring": "#d0302a"
+   }
+  },
+  "bill": {
+   "type": "bill",
+   "x": 1300,
+   "y": 1200,
+   "size": 520,
+   "pop": false,
+   "o": {
+    "text": "$999",
+    "rot": -0.1
+   }
+  },
+  "coins": {
+   "type": "coins",
+   "x": 640,
+   "y": -300,
+   "size": 360,
+   "pop": false,
+   "o": {
+    "n": 9
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "Ever feel *dragged* by your bills?"
+  },
+  {
+   "t": 1.6,
+   "move": {
+    "bill": [
+     880,
+     1180,
+     0.5,
+     "back"
+    ]
+   }
+  },
+  {
+   "t": 2.2,
+   "do": {
+    "me": "dragged shocked left"
+   },
+   "move": {
+    "me": [
+     300,
+     1500,
+     1.8
+    ],
+    "bill": [
+     420,
+     1180,
+     1.8
+    ]
+   }
+  },
+  {
+   "t": 4.2,
+   "move": {
+    "coins": [
+     430,
+     1500,
+     0.35
+    ]
+   },
+   "fx": "boom"
+  },
+  {
+   "t": 4.5,
+   "do": {
+    "me": "flattened dead front"
+   },
+   "caption": "That's not bad luck. It's *interest*."
+  },
+  {
+   "t": 6.2,
+   "do": {
+    "host": "explain smirk"
+   }
+  }
+ ]
+}

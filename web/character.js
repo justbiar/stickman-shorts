@@ -212,10 +212,19 @@ function drawOutfit(ctx, c, w, h, side, dir) {
   if (c.scarf) { ctx.fillStyle = c.scarf; ctx.beginPath(); ctx.roundRect(-w / 2 - 8, -h - 10, w + 16, 26, 12); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.roundRect(side ? -8 * dir : 8, -h + 8, 18, 50, 6); ctx.fill(); ctx.stroke(); }
 }
 function drawFacialHair(ctx, c, r, dir, side) {
-  ctx.fillStyle = c.beardColor || INK; ctx.strokeStyle = INK; ctx.lineWidth = 4; const ox = side ? r * .3 * dir : 0;
-  if (c.beard === "mustache" || c.beard === "full") for (const s of (side ? [dir] : [-1, 1])) { ctx.beginPath(); ctx.ellipse(ox + s * r * .17, r * .3, r * .2, r * .07, s * -.3, 0, 7); ctx.fill(); }
-  if (c.beard === "full") { ctx.beginPath(); ctx.moveTo(ox - r * .55, r * .25); ctx.quadraticCurveTo(ox, r * 1.35, ox + r * .55, r * .25); ctx.quadraticCurveTo(ox, r * .75, ox - r * .55, r * .25); ctx.fill(); ctx.stroke(); }
-  if (c.beard === "stubble") { ctx.fillStyle = "rgba(30,30,36,.55)"; for (let k = 0; k < 22; k++) { const a = Math.PI * (.2 + .6 * (k / 21)); ctx.beginPath(); ctx.arc(ox + Math.cos(a) * r * .62, Math.sin(a) * r * .62 + r * .1, 2.4, 0, 7); ctx.fill(); } }
+  // Facial hair keeps clear of the mouth (y ~ .42r, open mouths reach ~.6r) so it never reads as a second mouth:
+  // the beard is a jaw band below .64r, the mustache a small outlined shape at .27r, stubble a soft shade with no line.
+  const ox = side ? r * .3 * dir : 0, hair = c.beardColor || "#4a3424";
+  ctx.save(); ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.clip();
+  if (c.beard === "stubble") { ctx.fillStyle = "rgba(40,40,48,.13)"; ctx.beginPath(); ctx.ellipse(ox * .5, r * .62, r * .78, r * .42, 0, 0, 7); ctx.fill(); }
+  ctx.restore();
+  if (c.beard === "full") { const a0 = .22, a1 = Math.PI - .22; ctx.beginPath(); ctx.moveTo(Math.cos(a0) * r, Math.sin(a0) * r);
+    ctx.arc(0, r * .04, r * 1.06, a0, a1); ctx.lineTo(Math.cos(a1) * r, Math.sin(a1) * r);
+    ctx.quadraticCurveTo(ox - r * .3, r * .62, ox, r * .66); ctx.quadraticCurveTo(ox + r * .3, r * .62, Math.cos(a0) * r, Math.sin(a0) * r);
+    ctx.fillStyle = hair; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = INK; ctx.stroke(); }
+  if (c.beard === "mustache" || c.beard === "full") { ctx.beginPath(); const y = r * .21, w = r * (side ? .2 : .27);
+    ctx.moveTo(ox - w, y + r * .04); ctx.quadraticCurveTo(ox - w * .5, y - r * .07, ox, y - r * .01); ctx.quadraticCurveTo(ox + w * .5, y - r * .07, ox + w, y + r * .04);
+    ctx.quadraticCurveTo(ox, y + r * .02, ox - w, y + r * .04); ctx.fillStyle = hair; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = INK; ctx.stroke(); }
   if (c.glasses) { ctx.lineWidth = 4; ctx.strokeStyle = INK; for (const x of side ? [r * .02 * dir + ox * .4, r * .42 * dir + ox * .4] : [-r * .3, r * .3]) { ctx.beginPath(); ctx.arc(x, -r * .02, r * .2, 0, 7); ctx.stroke(); } }
 }
 function drawHat(ctx, c, r, dir, side) {

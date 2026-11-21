@@ -1,0 +1,99 @@
+{
+ "title": "Life has no A button",
+ "style": "b7-pixel",
+ "duration": 8,
+ "cast": {
+  "me": {
+   "x": 420,
+   "size": 520,
+   "look": "right",
+   "act": "idle",
+   "face": "happy"
+  }
+ },
+ "props": {
+  "btn": {
+   "type": "button",
+   "x": 860,
+   "y": 1840,
+   "size": 240,
+   "pop": false,
+   "o": {
+    "k": 0,
+    "text": "A"
+   }
+  },
+  "coin": {
+   "type": "coin",
+   "x": 730,
+   "y": 1040,
+   "size": 260,
+   "hidden": true
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "Press *A* to jump"
+  },
+  {
+   "t": 1.4,
+   "anim": {
+    "btn": {
+     "k": [
+      0,
+      1,
+      0.1
+     ]
+    }
+   },
+   "do": {
+    "me": "jump excited right"
+   }
+  },
+  {
+   "t": 1.6,
+   "anim": {
+    "btn": {
+     "k": [
+      1,
+      0,
+      0.2
+     ]
+    }
+   }
+  },
+  {
+   "t": 2.2,
+   "show": [
+    "coin"
+   ],
+   "move": {
+    "coin": [
+     730,
+     880,
+     0.6,
+     "back"
+    ]
+   },
+   "caption": "+1 COIN"
+  },
+  {
+   "t": 3.6,
+   "hide": [
+    "coin"
+   ],
+   "do": {
+    "me": "idle happy front"
+   },
+   "caption": "Easy, right?"
+  },
+  {
+   "t": 5.0,
+   "do": {
+    "me": "sitSad sad front"
+   },
+   "caption": "Life has *no* A button."
+  }
+ ]
+}

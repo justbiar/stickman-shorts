@@ -93,6 +93,47 @@ hat: fedora | cowboy | hardhat | helmet | pilot | beanie | straw | cap   (+ hatC
 
 Add a function to `SETS` in `web/sets.js`. It gets a toolkit `k` (`box`, `cyl`, `ground`, `sky`, `glow`, `tex`, `particles`, `light`, `character`, `spot` and more) and returns `{ fx(t, events) }` for anything that moves. Keep shapes simple and let the lighting do the work: a three-color sky gradient, fog in the same color family as the horizon, one strong sun for shadows, a few additive glows for lamps.
 
+## The stick library (2D)
+
+Next to the three.js worlds there is a flat 2D kit in `web/kit/`, made for quick silent shorts in 17 looks. Everything is drawn in code, frame by frame: no image generation, no voice credits.
+
+![All 17 styles](docs/styles.jpg)
+
+| file | what is in it |
+|---|---|
+| `kit/figure.js` | one parametric stick figure, five bodies (`line`, `torso`, `rubber`, `glow`, `chunky`) and costumes: hoodie, suit, kimono, fur, Egyptian kilt, robe, dress, apron, hats, hair, beards, glasses, gloves |
+| `kit/face.js` | 31 expressions, each with exactly one mouth ([sheet](docs/library/faces.png)) |
+| `kit/poses.js` | 66 actions: talking, pointing, walking, running, sneaking, sitting, kneeling, lying down, falling, fighting, being dragged and more ([sheet](docs/library/poses.png)) |
+| `kit/props.js` | 37 props: cage, battery, phone, speech and thought bubbles, coins, bills, price tags, TV, clock, fire, rain cloud, cat, glass UI panels and more ([sheet](docs/library/props.png)) |
+| `kit/backgrounds.js` | 15 painted worlds: paper, black, tech grid, city at dusk, cave, subway, Edo street, Egyptian temple, amber noir, vintage street, bedroom, dark TV void, dark room, Paris, pixel world |
+| `kit/styles.js` | the 17 presets: pen (clean or hand-drawn with line boil), default figure, background, caption type, finishing passes (grain, vignette, scanlines, bloom, pixelation) ([sheet](docs/library/bodies.png)) |
+
+| style | look |
+|---|---|
+| `a1-light`, `a1-dark` | classic black ink on white, or white on black |
+| `a2-tech`, `a2-story` | red beanie, yellow shirt; glass UI on a grid, or a colorful city |
+| `a3-cave` | prehistoric, rough boiling lines, campfire |
+| `a4-cozy` | soft everyday places, warm light |
+| `a5-edo`, `a5-egypt` | historical cartoon, white round heads, period costumes |
+| `a6-amber` | orange hood, golden light, plum shadows |
+| `a7-rubber` | thin noodle limbs, gloves, two hair tufts, sepia grain |
+| `b1-line`, `b2-hand` | minimal line art on paper, or colorful hand-drawn with paper captions |
+| `b3-retrotv` | glowing figures, scanlines, bloom |
+| `b4-survival` | chunky figure with white gloves, dark room, flashlight vignette |
+| `b5-avatar` | presenter in a corner badge, stickman acting out the idea |
+| `b6-meme` | loose lines, soft colors, wide comedy staging |
+| `b7-pixel` | the whole frame rendered at 1/6 resolution and scaled up crisp |
+
+A 2D clip is a JSON file in `clips/`: a cast, props, and beats on a timeline (seconds), each able to change acting (`do`), move things (`move`), show or hide props, animate a prop value (`anim`, like a battery draining), move the camera (`cam`), set the caption (`*word*` is highlighted) and fire `shake`, `flash`, `boom` or `punch`.
+
+```sh
+node tools/render.mjs "http://127.0.0.1:8799/web/clip.html?clip=a1-light" out/a1-light.mp4 30
+```
+
+Contact sheets of the whole kit: `web/library.html?sheet=faces|poses|bodies|props`.
+
+The style catalogue was inspired by [kaomei/stickman-video-director](https://github.com/kaomei/stickman-video-director) (MIT), which builds these looks with image models. Here each look is rebuilt from scratch in canvas code.
+
 ## Requirements
 
 - Node 22 or newer (uses the built-in WebSocket, no npm install)

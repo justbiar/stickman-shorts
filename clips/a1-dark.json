@@ -1,0 +1,91 @@
+{
+ "title": "Attention is a battery",
+ "style": "a1-dark",
+ "duration": 8,
+ "cast": {
+  "me": {
+   "x": 540,
+   "size": 640,
+   "act": "idle",
+   "face": "happy"
+  }
+ },
+ "props": {
+  "bat": {
+   "type": "battery",
+   "x": 540,
+   "y": 520,
+   "size": 320,
+   "o": {
+    "k": 1,
+    "color": "#f4f4f6"
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "Your attention is a *battery*"
+  },
+  {
+   "t": 2.0,
+   "do": {
+    "me": "phone tired"
+   },
+   "hold": {
+    "me": "phone:.42"
+   },
+   "anim": {
+    "bat": {
+     "k": [
+      1,
+      0.12,
+      3.2
+     ]
+    }
+   },
+   "caption": "every scroll drains it"
+  },
+  {
+   "t": 4.4,
+   "do": {
+    "me": "slump sleepy"
+   },
+   "cam": {
+    "x": 540,
+    "y": 900,
+    "zoom": 1.2
+   }
+  },
+  {
+   "t": 5.8,
+   "hold": {
+    "me": null
+   },
+   "do": {
+    "me": "stand neutral"
+   },
+   "cam": {
+    "x": 540,
+    "y": 960,
+    "zoom": 1
+   }
+  },
+  {
+   "t": 6.3,
+   "anim": {
+    "bat": {
+     "k": [
+      0.12,
+      1,
+      0.9
+     ]
+    }
+   },
+   "do": {
+    "me": "cheer joy"
+   },
+   "caption": "*Recharge* it."
+  }
+ ]
+}

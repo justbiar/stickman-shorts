@@ -1,0 +1,31 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>stick library</title>
+<style>html,body{margin:0;background:#fff}canvas{display:block;max-width:100%}</style></head>
+<body><canvas id="out"></canvas>
+<script type="module">
+// Contact sheets of the whole kit:  library.html?sheet=faces | poses | bodies | props
+import { Pen } from "./kit/pen.js";
+import { drawFigure } from "./kit/figure.js";
+import { drawFace, EXPRESSION_NAMES } from "./kit/face.js";
+import { ACTIONS, ACTION_NAMES } from "./kit/poses.js";
+import { PROPS, PROP_NAMES } from "./kit/props.js";
+import { STYLES, STYLE_IDS } from "./kit/styles.js";
+
+const sheet = new URLSearchParams(location.search).get("sheet") || "faces";
+const out = document.getElementById("out"), c = out.getContext("2d"), pen = new Pen(c, { ink: "#141418", width: 8 });
+const label = (s, x, y) => pen.text(s, x, y, { font: '600 26px Menlo, monospace', color: "#55555f" });
+const grid = (n, cols, cw, ch) => { out.width = cols * cw; out.height = Math.ceil(n / cols) * ch + 20; c.fillStyle = "#fbfaf6"; c.fillRect(0, 0, out.width, out.height); return i => [(i % cols) * cw, Math.floor(i / cols) * ch]; };
+
+if (sheet === "faces") { const at = grid(EXPRESSION_NAMES.length, 6, 260, 280);
+  EXPRESSION_NAMES.forEach((n, i) => { const [x, y] = at(i); c.save(); c.translate(x + 130, y + 120); pen.circle(0, 0, 82, "#fff", "#141418", 8); drawFace(pen, 82, n, { t: .4 }); c.restore(); label(n, x + 130, y + 250); }); }
+if (sheet === "poses") { const at = grid(ACTION_NAMES.length, 8, 240, 380);
+  ACTION_NAMES.forEach((n, i) => { const [x, y] = at(i); drawFigure(pen, x + 120, y + 320, 260, { body: "line" }, ACTIONS[n](.35), "neutral", { t: .35, look: i % 3 === 2 ? "right" : "front" }); label(n, x + 120, y + 360); }); }
+if (sheet === "bodies") { const at = grid(STYLE_IDS.length, 6, 300, 520);
+  STYLE_IDS.forEach((id, i) => { const [x, y] = at(i); const s = STYLES[id]; const bgc = { "a1-dark": "#08080a", "b3-retrotv": "#0a0e18", "b4-survival": "#22232a", "a6-amber": "#3a1838", "b7-pixel": "#5a8ae8", "a3-cave": "#5a4232" }[id];
+    if (bgc) { c.fillStyle = bgc; c.fillRect(x + 6, y + 6, 288, 440); } const p = new Pen(c, s.pen); p.frame(0);
+    drawFigure(p, x + 150, y + 420, 340, s.figure, ACTIONS[["wave", "talk", "point", "cheer", "think", "shrug"][i % 6]](.4), ["happy", "neutral", "excited", "smug", "thinking", "surprised"][i % 6], { t: .4 }); label(id, x + 150, y + 485); }); }
+if (sheet === "props") { const at = grid(PROP_NAMES.length, 6, 260, 300);
+  PROP_NAMES.forEach((n, i) => { const [x, y] = at(i); const yy = ["battery", "phone", "coin", "bill", "pricetag", "cloud", "clock", "heart", "mark", "arrow", "panel", "lantern", "flashlight"].includes(n) ? y + 130 : y + 230;
+    c.save(); c.beginPath(); c.rect(x, y, 260, 260); c.clip(); PROPS[n](pen, x + 130 + (n === "flashlight" ? -80 : 0), yy, n === "eiffel" ? 120 : n === "board" ? 160 : 200, .5, { text: n === "bubble" || n === "thought" ? "hi!" : n === "pricetag" ? "$0.01" : n === "sign" ? "EXIT" : undefined, k: .6, rain: true, ring: true }); c.restore(); label(n, x + 130, y + 280); }); }
+window.ready = true; window.png = async () => out.toDataURL("image/png");
+</script></body></html>

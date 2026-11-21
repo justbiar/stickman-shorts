@@ -1,0 +1,41 @@
+// Style presets: how the pen draws, what the default figure looks like, which background, the caption type and the
+// finishing passes. Inspired by the style catalogue of kaomei/stickman-video-director (MIT), rebuilt here as pure code.
+//   post: grain (paper texture), vignette, scanlines, bloom (soft glow), pixel (render at 1/n resolution), chroma
+
+export const STYLES = {
+  "a1-light": { name: "Classic Black & White", bg: "paper", pen: { ink: "#141418", width: 10 }, figure: { body: "line" }, accent: "#e0384a",
+    caption: { font: '900 76px "Avenir Next", sans-serif', color: "#141418", y: 1700 }, post: { grain: .03 } },
+  "a1-dark": { name: "Classic White on Black", bg: "void", pen: { ink: "#f4f4f6", width: 10 }, figure: { body: "line", skin: "#08080a" }, accent: "#ffcf3a",
+    caption: { font: '900 76px "Avenir Next", sans-serif', color: "#f4f4f6", y: 1700 }, post: { vignette: .4 } },
+  "a2-tech": { name: "Modern Pop · Minimal Tech", bg: "techGrid", pen: { ink: "#1a2230", width: 9 }, figure: { body: "torso", outfit: "tee", shirt: "#f2c230", pants: "#2a3a5a", hat: "beanie", hatColor: "#d8302a" },
+    caption: { font: '800 70px "Avenir Next", sans-serif', color: "#0f3a4a", y: 1720, accent: "#14a8d0" }, post: { vignette: .12 } },
+  "a2-story": { name: "Modern Pop · Colorful Story", bg: "cityDusk", pen: { ink: "#1a1420", width: 9 }, figure: { body: "torso", outfit: "tee", shirt: "#f2c230", pants: "#2a3a5a", hat: "beanie", hatColor: "#d8302a" },
+    caption: { font: '900 74px "Avenir Next", sans-serif', color: "#ffffff", stroke: "rgba(20,10,30,.85)", y: 1700 }, post: { vignette: .3, grain: .02 } },
+  "a3-cave": { name: "Prehistoric Cave", bg: "cave", pen: { ink: "#1e140e", width: 10, jitter: 5, boil: 8 }, figure: { body: "torso", outfit: "fur", shirt: "#b8823a", hair: "messy", hairColor: "#2a1a10", skin: "#f6eee0" },
+    caption: { font: '700 80px "Marker Felt", "Chalkboard SE", sans-serif', color: "#fff4dc", stroke: "#1e140e", y: 1700 }, post: { grain: .07, vignette: .45 } },
+  "a4-cozy": { name: "Cozy Storytelling", bg: "subway", pen: { ink: "#2a2430", width: 8 }, figure: { body: "torso", outfit: "hoodie", hood: "#6a9ac8", hoodDown: true, pants: "#3a3a4a" },
+    caption: { font: '700 62px "Avenir Next", sans-serif', color: "#2a2430", box: "rgba(255,250,240,.9)", y: 1720 }, post: { grain: .03, vignette: .2, warm: .06 } },
+  "a5-edo": { name: "Historical Cartoon · Edo", bg: "edo", pen: { ink: "#1a1418", width: 9 }, figure: { body: "torso", outfit: "kimono", shirt: "#2f4a7a", sash: "#c8a23a", hair: "topknot", hairColor: "#1a1418" },
+    caption: { font: '800 72px Georgia, serif', color: "#ffffff", stroke: "#1a1418", y: 1710 }, post: { grain: .03 } },
+  "a5-egypt": { name: "Historical Cartoon · Egypt", bg: "egypt", pen: { ink: "#1a1418", width: 9 }, figure: { body: "torso", outfit: "egypt", shirt: "#f4efe2", hat: "nemes" },
+    caption: { font: '800 72px Georgia, serif', color: "#ffffff", stroke: "#1a1418", y: 1710 }, post: { grain: .03 } },
+  "a6-amber": { name: "Amber Noir", bg: "amberNoir", pen: { ink: "#0e0610", width: 8 }, figure: { body: "torso", outfit: "hoodie", hood: "#e8862a", pants: "#2a1a2a", skin: "#f6efe6" },
+    caption: { font: '700 66px "Avenir Next Condensed", "Avenir Next", sans-serif', color: "#ffc26a", y: 1720, upper: true }, post: { vignette: .55, grain: .04 } },
+  "a7-rubber": { name: "Rubber Hose", bg: "vintage", pen: { ink: "#1e1a16", width: 7, jitter: 2, boil: 6 }, figure: { body: "rubber", hair: "tufts" },
+    caption: { font: '700 66px "American Typewriter", Georgia, serif', color: "#1e1a16", box: "rgba(244,239,220,.92)", y: 1720 }, post: { grain: .08, vignette: .35, sepia: .15 } },
+  "b1-line": { name: "Minimal Line Art", bg: "paper", bgOpts: { paper: "#fdfcf8" }, pen: { ink: "#18181c", width: 9, jitter: 3, boil: 6 }, figure: { body: "line" },
+    caption: { font: '700 74px "Marker Felt", "Chalkboard SE", sans-serif', color: "#18181c", y: 1700, accent: "#e0384a" }, post: { grain: .02 } },
+  "b2-hand": { name: "Colorful Hand-Drawn", bg: "bedroom", pen: { ink: "#2a2028", width: 7, jitter: 2.5, boil: 6 }, figure: { body: "torso", shirt: "#8ab8d8", pants: "#5a6a8a" },
+    caption: { font: '700 60px "Noteworthy", "Marker Felt", sans-serif', color: "#2a2028", box: "#f8f0dc", y: 1720 }, post: { grain: .06, vignette: .2 } },
+  "b3-retrotv": { name: "Retro TV", bg: "tvVoid", pen: { ink: "#c9ccd6", width: 7 }, figure: { body: "glow", faceInk: "#2a2c34" },
+    caption: { font: '700 64px "Avenir Next", sans-serif', color: "#ffffff", glow: true, y: 1700 }, post: { bloom: .55, scanlines: .18, vignette: .55, chroma: 2 } },
+  "b4-survival": { name: "Survival Thriller", bg: "darkRoom", pen: { ink: "#0a0a0c", width: 9 }, figure: { body: "chunky", shirt: "#2a2a30", gloves: true },
+    caption: { font: '900 72px "Avenir Next", sans-serif', color: "#ffffff", y: 1710, accent: "#e0303a", upper: true }, post: { vignette: .75, grain: .05, flashlight: true } },
+  "b5-avatar": { name: "Avatar Explainer", bg: "paper", bgOpts: { paper: "#f6ecd8" }, pen: { ink: "#1a1418", width: 9, jitter: 2, boil: 5 }, figure: { body: "chunky", shirt: "#ffffff" },
+    caption: { font: '900 70px "Avenir Next", sans-serif', color: "#1a1418", y: 1700, accent: "#d0302a", upper: true }, post: { grain: .06 } },
+  "b6-meme": { name: "Meme Story", bg: "paris", pen: { ink: "#2a2028", width: 8, jitter: 3, boil: 6 }, figure: { body: "torso", shirt: "#c8d8e8", pants: "#4a4a5a" },
+    caption: { font: '700 72px "Chalkboard SE", "Marker Felt", sans-serif', color: "#ffffff", stroke: "#2a2028", y: 1700 }, post: { grain: .05, vignette: .2 } },
+  "b7-pixel": { name: "Pixel Theater", bg: "pixelWorld", pen: { ink: "#ffffff", width: 12 }, figure: { body: "line", skin: "#ffffff", faceInk: "#14141a", ink: "#ffffff" },
+    caption: { font: '900 60px Menlo, monospace', color: "#ffffff", stroke: "#14141a", y: 1700, upper: true }, post: { pixel: 6 } },
+};
+export const STYLE_IDS = Object.keys(STYLES);

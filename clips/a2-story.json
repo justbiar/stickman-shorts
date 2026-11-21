@@ -1,0 +1,102 @@
+{
+ "title": "New city",
+ "style": "a2-story",
+ "duration": 8,
+ "cast": {
+  "me": {
+   "x": 160,
+   "size": 560,
+   "act": "walk",
+   "look": "right",
+   "face": "neutral"
+  },
+  "local": {
+   "x": 1250,
+   "size": 560,
+   "look": "left",
+   "show": false,
+   "spec": {
+    "shirt": "#5ab0a0",
+    "hat": "cap",
+    "hatColor": "#2a3a5a"
+   }
+  }
+ },
+ "props": {
+  "q": {
+   "type": "thought",
+   "x": 560,
+   "y": 760,
+   "size": 260,
+   "hidden": true,
+   "o": {
+    "text": "?"
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "cam": {
+    "x": 380,
+    "y": 960,
+    "zoom": 1
+   },
+   "move": {
+    "me": [
+     560,
+     1500,
+     3,
+     "linear"
+    ]
+   },
+   "caption": "New city. *Nobody* knows you."
+  },
+  {
+   "t": 0.01,
+   "cam": {
+    "x": 620,
+    "y": 960,
+    "zoom": 1,
+    "ease": 3
+   }
+  },
+  {
+   "t": 3.0,
+   "do": {
+    "me": "idle worried front"
+   },
+   "show": [
+    "q"
+   ]
+  },
+  {
+   "t": 4.6,
+   "hide": [
+    "q"
+   ],
+   "show": [
+    "local"
+   ],
+   "move": {
+    "local": [
+     860,
+     1500,
+     1.4,
+     "linear"
+    ]
+   },
+   "do": {
+    "local": "walk happy left"
+   }
+  },
+  {
+   "t": 6.0,
+   "do": {
+    "local": "wave happy left",
+    "me": "wave2 joy right"
+   },
+   "caption": "Until *someone* says hi."
+  }
+ ]
+}

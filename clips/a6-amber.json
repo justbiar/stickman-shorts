@@ -1,0 +1,172 @@
+{
+ "title": "What if everything cost one cent?",
+ "style": "a6-amber",
+ "duration": 8,
+ "cast": {
+  "me": {
+   "x": 320,
+   "size": 600,
+   "look": "right",
+   "act": "idle",
+   "face": "neutral"
+  },
+  "s1": {
+   "x": -150,
+   "size": 560,
+   "look": "right",
+   "show": false,
+   "spec": {
+    "hood": "#7a4a5a"
+   }
+  },
+  "s2": {
+   "x": -350,
+   "size": 540,
+   "look": "right",
+   "show": false,
+   "spec": {
+    "hood": "#5a3a4a"
+   }
+  }
+ },
+ "props": {
+  "tag0": {
+   "type": "pricetag",
+   "x": 200,
+   "y": -200,
+   "size": 260,
+   "pop": false,
+   "o": {
+    "text": "$0.01"
+   }
+  },
+  "tag1": {
+   "type": "pricetag",
+   "x": 430,
+   "y": -200,
+   "size": 260,
+   "pop": false,
+   "o": {
+    "text": "$0.01"
+   }
+  },
+  "tag2": {
+   "type": "pricetag",
+   "x": 660,
+   "y": -200,
+   "size": 260,
+   "pop": false,
+   "o": {
+    "text": "$0.01"
+   }
+  },
+  "tag3": {
+   "type": "pricetag",
+   "x": 890,
+   "y": -200,
+   "size": 260,
+   "pop": false,
+   "o": {
+    "text": "$0.01"
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "What if everything cost *one cent*?"
+  },
+  {
+   "t": 1.4,
+   "move": {
+    "tag0": [
+     200,
+     520,
+     1.0,
+     "back"
+    ],
+    "tag1": [
+     430,
+     700,
+     1.15,
+     "back"
+    ],
+    "tag2": [
+     660,
+     520,
+     1.3,
+     "back"
+    ],
+    "tag3": [
+     890,
+     700,
+     1.45,
+     "back"
+    ]
+   },
+   "do": {
+    "me": "shocked surprised right"
+   }
+  },
+  {
+   "t": 3.2,
+   "do": {
+    "me": "walk excited right"
+   },
+   "move": {
+    "me": [
+     620,
+     1500,
+     1.4,
+     "linear"
+    ]
+   },
+   "caption": "You'd run to the store."
+  },
+  {
+   "t": 4.6,
+   "do": {
+    "me": "idle neutral left"
+   },
+   "show": [
+    "s1",
+    "s2"
+   ],
+   "move": {
+    "s1": [
+     300,
+     1500,
+     1.6,
+     "linear"
+    ],
+    "s2": [
+     120,
+     1500,
+     1.8,
+     "linear"
+    ]
+   }
+  },
+  {
+   "t": 4.61,
+   "do": {
+    "s1": "walk neutral right",
+    "s2": "walk neutral right"
+   }
+  },
+  {
+   "t": 6.3,
+   "do": {
+    "me": "idle shocked left",
+    "s1": "idle neutral right",
+    "s2": "idle neutral right"
+   },
+   "cam": {
+    "x": 520,
+    "y": 960,
+    "zoom": 1.15
+   },
+   "caption": "So would *everyone*."
+  }
+ ]
+}

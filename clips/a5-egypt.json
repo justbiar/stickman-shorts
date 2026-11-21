@@ -1,0 +1,109 @@
+{
+ "title": "The cat always wins",
+ "style": "a5-egypt",
+ "duration": 8,
+ "cast": {
+  "ph": {
+   "x": 640,
+   "size": 640,
+   "look": "left",
+   "act": "hold",
+   "face": "happy",
+   "hold": "bread:.5"
+  }
+ },
+ "props": {
+  "cat": {
+   "type": "cat",
+   "x": -200,
+   "y": 1500,
+   "size": 260,
+   "pop": false,
+   "o": {
+    "dir": 1,
+    "run": 1
+   }
+  },
+  "loaf": {
+   "type": "bread",
+   "x": 430,
+   "y": 1380,
+   "size": 320,
+   "hidden": true,
+   "pop": false
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "In Egypt, cats were *sacred*."
+  },
+  {
+   "t": 1.6,
+   "move": {
+    "cat": [
+     380,
+     1500,
+     1.4
+    ]
+   },
+   "do": {
+    "ph": "hold surprised left"
+   }
+  },
+  {
+   "t": 3.2,
+   "hold": {
+    "ph": null
+   },
+   "show": [
+    "loaf"
+   ],
+   "move": {
+    "cat": [
+     1400,
+     1500,
+     1.6,
+     "linear"
+    ],
+    "loaf": [
+     1500,
+     1380,
+     1.6,
+     "linear"
+    ]
+   },
+   "set": {
+    "loaf": {}
+   },
+   "do": {
+    "ph": "shocked shocked left"
+   },
+   "fx": "shake",
+   "caption": "So when one stole your *lunch*..."
+  },
+  {
+   "t": 3.21,
+   "move": {
+    "loaf": [
+     1500,
+     1380,
+     1.6,
+     "linear"
+    ]
+   }
+  },
+  {
+   "t": 5.4,
+   "do": {
+    "ph": "pray happy right"
+   },
+   "cam": {
+    "x": 640,
+    "y": 1000,
+    "zoom": 1.15
+   },
+   "caption": "you said *thank you*."
+  }
+ ]
+}

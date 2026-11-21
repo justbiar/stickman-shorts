@@ -1,0 +1,74 @@
+{
+ "title": "Rule 1: never answer",
+ "style": "b4-survival",
+ "duration": 8,
+ "cast": {
+  "me": {
+   "x": 360,
+   "size": 600,
+   "look": "right",
+   "act": "idle",
+   "face": "neutral"
+  }
+ },
+ "props": {
+  "phone": {
+   "type": "phone",
+   "x": 720,
+   "y": 1460,
+   "size": 200,
+   "o": {
+    "ring": true,
+    "screen": "#e8f0ff",
+    "color": "#e8f0ff"
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "Rule 1: *never* answer after midnight."
+  },
+  {
+   "t": 2.2,
+   "do": {
+    "me": "scared scared right"
+   },
+   "cam": {
+    "x": 560,
+    "y": 1150,
+    "zoom": 1.3
+   }
+  },
+  {
+   "t": 3.6,
+   "cam": {
+    "x": 720,
+    "y": 1350,
+    "zoom": 1.7
+   },
+   "caption": "Even if it's *your* number."
+  },
+  {
+   "t": 5.2,
+   "set": {
+    "phone": {
+     "ring": false,
+     "screen": "#20222a"
+    }
+   },
+   "cam": {
+    "x": 400,
+    "y": 950,
+    "zoom": 1.25
+   },
+   "do": {
+    "me": "shiver scared front"
+   }
+  },
+  {
+   "t": 6.3,
+   "caption": "*Especially* then."
+  }
+ ]
+}

@@ -1,0 +1,108 @@
+{
+ "title": "Posting every day, nobody watching",
+ "style": "b1-line",
+ "duration": 8,
+ "cast": {
+  "me": {
+   "x": 380,
+   "size": 600,
+   "act": "type",
+   "face": "tired",
+   "look": "right"
+  }
+ },
+ "props": {
+  "desk": {
+   "type": "desk",
+   "x": 500,
+   "y": 1500,
+   "size": 400,
+   "o": {
+    "laptop": true
+   }
+  },
+  "t0": {
+   "type": "thought",
+   "x": 700,
+   "y": 700,
+   "size": 280,
+   "hidden": true,
+   "o": {
+    "text": "0 views",
+    "font": "\"Marker Felt\", sans-serif"
+   }
+  },
+  "bulb": {
+   "type": "bulb",
+   "x": 540,
+   "y": 640,
+   "size": 260,
+   "hidden": true
+  },
+  "arrow": {
+   "type": "arrow",
+   "x": 800,
+   "y": 1100,
+   "size": 260,
+   "hidden": true,
+   "o": {
+    "rot": -0.6
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "Posting *every* day?"
+  },
+  {
+   "t": 1.5,
+   "show": [
+    "t0"
+   ],
+   "do": {
+    "me": "type sad right"
+   },
+   "caption": "and *nobody* is watching"
+  },
+  {
+   "t": 3.4,
+   "hide": [
+    "t0"
+   ],
+   "show": [
+    "bulb"
+   ],
+   "move": {
+    "me": [
+     540,
+     1500,
+     0.5
+    ]
+   },
+   "do": {
+    "me": "pointUp idea front"
+   },
+   "fx": "punch"
+  },
+  {
+   "t": 5.0,
+   "hide": [
+    "bulb"
+   ],
+   "show": [
+    "arrow"
+   ],
+   "do": {
+    "me": "present happy front"
+   },
+   "caption": "Post what *they* need."
+  },
+  {
+   "t": 6.6,
+   "do": {
+    "me": "cheer joy front"
+   }
+  }
+ ]
+}

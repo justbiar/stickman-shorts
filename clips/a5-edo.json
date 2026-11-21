@@ -1,0 +1,102 @@
+{
+ "title": "Samurai had bills too",
+ "style": "a5-edo",
+ "duration": 8,
+ "cast": {
+  "sam": {
+   "x": 360,
+   "size": 620,
+   "look": "right",
+   "act": "idle",
+   "face": "determined",
+   "hold": "sword:.6"
+  },
+  "shop": {
+   "x": 740,
+   "size": 580,
+   "look": "left",
+   "spec": {
+    "outfit": "apron",
+    "shirt": "#8a6a4a",
+    "hair": "bald",
+    "apron": "#f2ead8"
+   }
+  }
+ },
+ "props": {
+  "sign": {
+   "type": "sign",
+   "x": 1050,
+   "y": 1500,
+   "size": 280,
+   "o": {
+    "text": "RICE 3 MON",
+    "font": "Georgia, serif"
+   }
+  },
+  "coins": {
+   "type": "coins",
+   "x": 520,
+   "y": 1490,
+   "size": 160,
+   "hidden": true,
+   "o": {
+    "n": 3
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "Samurai had *bills* too."
+  },
+  {
+   "t": 1.8,
+   "do": {
+    "shop": "point smug left"
+   },
+   "cam": {
+    "x": 700,
+    "y": 960,
+    "zoom": 1.15
+   }
+  },
+  {
+   "t": 3.0,
+   "do": {
+    "sam": "shocked shocked right"
+   },
+   "cam": {
+    "x": 420,
+    "y": 940,
+    "zoom": 1.3
+   }
+  },
+  {
+   "t": 4.2,
+   "hold": {
+    "sam": "coin:.35"
+   },
+   "do": {
+    "sam": "count worried right"
+   },
+   "show": [
+    "coins"
+   ],
+   "cam": {
+    "x": 540,
+    "y": 960,
+    "zoom": 1
+   },
+   "caption": "Rice. Tea. *Rent*."
+  },
+  {
+   "t": 6.0,
+   "do": {
+    "sam": "sad sad right",
+    "shop": "crossArms smug left"
+   },
+   "caption": "Honor doesn't pay *rent*."
+  }
+ ]
+}

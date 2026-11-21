@@ -1,0 +1,121 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>stick clip</title>
+<style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block;width:100vw;height:auto}</style></head>
+<body><canvas id="out" width="1080" height="1920"></canvas>
+<script type="module">
+// Plays a 2D clip (clips/<name>.json) in one of the kit styles. Silent: the story is told with acting, props and captions.
+//   web/clip.html?clip=a1-cage            &t=2.5 for a single frame;  window.frame(t) is what tools/render.mjs calls
+import { Pen, ease, back, clamp, lerp, hash } from "./kit/pen.js";
+import { drawFigure } from "./kit/figure.js";
+import { ACTIONS } from "./kit/poses.js";
+import { PROPS } from "./kit/props.js";
+import { BACKGROUNDS, GROUND } from "./kit/backgrounds.js";
+import { STYLES } from "./kit/styles.js";
+
+const W = 1080, H = 1920, q = new URLSearchParams(location.search);
+const clip = await (await fetch(`../clips/${q.get("clip") || "a1-light"}.json`)).json();
+const style = STYLES[clip.style], post = { ...style.post, ...(clip.post || {}) };
+const PX = post.pixel || 1, out = document.getElementById("out"), octx = out.getContext("2d");
+const work = document.createElement("canvas"); work.width = W / PX; work.height = H / PX; const ctx = work.getContext("2d");
+const pen = new Pen(ctx, style.pen);
+const DUR = clip.duration || 8;
+
+// ---------- state: every beat changes some things; the state at t = all beats up to t ----------
+const beats = (clip.beats || []).slice().sort((a, b) => a.t - b.t);
+const cast = Object.entries(clip.cast || {}).map(([id, c]) => ({ id, ...c, spec: { ...style.figure, ...(c.spec || {}) } }));
+const props = Object.entries(clip.props || {}).map(([id, p]) => ({ id, ...p }));
+function stateAt(t) {
+  const st = { cam: { x: 540, y: 960, zoom: 1, ...(clip.cam || {}) }, camFrom: null, camT: 0, camEase: .7, caption: null, capT: 0, fx: [] };
+  for (const c of cast) st[c.id] = { act: c.act || "idle", face: c.face || "neutral", look: c.look || "front", x: c.x ?? 540, y: c.y ?? GROUND, size: c.size || 620, show: c.show !== false, hold: c.hold, actT: 0, move: null };
+  for (const p of props) st["p:" + p.id] = { x: p.x, y: p.y, size: p.size || 300, show: !p.hidden, o: { ...(p.o || {}) }, anim: {}, move: null, showT: -9 };
+  for (const b of beats) { if (b.t > t) break;
+    if (b.cam) { st.camFrom = { ...st.cam, ...camNow(st, b.t) }; st.cam = { ...st.cam, ...b.cam }; st.camT = b.t; st.camEase = b.cam.cut ? 0 : (b.cam.ease ?? .7); }
+    for (const [id, v] of Object.entries(b.do || {})) { const [act, face, look] = v.split(" "); const s = st[id]; if (act && act !== "-") { if (act !== s.act) s.actT = b.t; s.act = act; } if (face && face !== "-") s.face = face; if (look) s.look = look; }
+    for (const [id, m] of Object.entries(b.move || {})) { const s = st[id] || st["p:" + id]; const cur = posNow(s, b.t); s.move = { fx: cur[0], fy: cur[1], tx: m[0], ty: m[1], t0: b.t, d: m[2] ?? 1, e: m[3] || "ease" }; s.x = m[0]; s.y = m[1]; }
+    for (const id of b.show || []) { const s = st[id] || st["p:" + id]; if (!s.show) s.showT = b.t; s.show = true; }
+    for (const id of b.hide || []) { const s = st[id] || st["p:" + id]; s.show = false; }
+    for (const [id, v] of Object.entries(b.hold || {})) st[id].hold = v || null;
+    for (const [id, a] of Object.entries(b.anim || {})) { const s = st["p:" + id]; for (const [k, [from, to, d]] of Object.entries(a)) s.anim[k] = { from, to, t0: b.t, d: d ?? 1 }; }
+    for (const [id, o] of Object.entries(b.set || {})) Object.assign(st["p:" + id].o, o);
+    if (b.caption !== undefined) { st.caption = b.caption; st.capT = b.t; }
+    for (const f of [].concat(b.fx || [])) st.fx.push({ name: f, t: b.t });
+  }
+  return st;
+}
+function camNow(st, t) { if (!st.camFrom || st.camEase === 0) return st.cam; const k = ease((t - st.camT) / st.camEase); const f = st.camFrom, c = st.cam; return { x: lerp(f.x, c.x, k), y: lerp(f.y, c.y, k), zoom: lerp(f.zoom, c.zoom, k) }; }
+function posNow(s, t) { const m = s.move; if (!m) return [s.x, s.y]; const k = clamp((t - m.t0) / m.d); const e = m.e === "linear" ? k : m.e === "back" ? back(k) : ease(k); return [lerp(m.fx, m.tx, e), lerp(m.fy, m.ty, e)]; }
+
+// ---------- post passes ----------
+const grainTex = (() => { const c = document.createElement("canvas"); c.width = c.height = 256; const g = c.getContext("2d"); const d = g.createImageData(256, 256);
+  for (let i = 0; i < d.data.length; i += 4) { const v = 128 + (hash(i, 3) - .5) * 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; } g.putImageData(d, 0, 0); return c; })();
+function finish(t, st) {
+  const c = octx;
+  if (post.bloom) { c.save(); c.filter = "blur(18px)"; c.globalAlpha = post.bloom; c.globalCompositeOperation = "lighter"; c.drawImage(out, 0, 0); c.restore(); }
+  if (post.warm) { c.fillStyle = `rgba(255,170,90,${post.warm})`; c.globalCompositeOperation = "soft-light"; c.fillRect(0, 0, W, H); c.globalCompositeOperation = "source-over"; }
+  if (post.sepia) { c.fillStyle = `rgba(160,130,80,${post.sepia})`; c.globalCompositeOperation = "multiply"; c.fillRect(0, 0, W, H); c.globalCompositeOperation = "source-over"; }
+  if (post.flashlight) { const s = st.__flashAt || st.__flash; c.save(); const g = c.createRadialGradient(s?.[0] ?? 540, s?.[1] ?? 900, 80, s?.[0] ?? 540, s?.[1] ?? 900, 760); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,.62)"); c.fillStyle = g; c.fillRect(0, 0, W, H); c.restore(); }
+  if (post.grain) { c.save(); c.globalAlpha = post.grain; c.globalCompositeOperation = "overlay"; const ox = Math.floor(hash(Math.floor(t * 12), 1) * 256), oy = Math.floor(hash(Math.floor(t * 12), 2) * 256);
+    for (let x = -ox; x < W; x += 256) for (let y = -oy; y < H; y += 256) c.drawImage(grainTex, x, y); c.restore(); }
+  if (post.scanlines) { c.fillStyle = `rgba(0,0,0,${post.scanlines})`; for (let y = 0; y < H; y += 6) c.fillRect(0, y, W, 3); }
+  if (post.chroma) { c.save(); c.globalCompositeOperation = "lighter"; c.globalAlpha = .12; c.drawImage(out, post.chroma, 0); c.restore(); }
+  if (post.vignette) { const g = c.createRadialGradient(W / 2, H * .48, H * .25, W / 2, H * .5, H * .78); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, `rgba(0,0,0,${post.vignette})`); c.fillStyle = g; c.fillRect(0, 0, W, H); }
+}
+function caption(t, st) {
+  const cap = style.caption, text = st.caption; if (!text) return; const age = t - st.capT, k = back(Math.min(1, age / .25));
+  const c = PX > 1 ? ctx : octx; c.save();   // the pixel canvas already carries its 1/PX scale
+  const str = x => cap.upper ? x.toUpperCase() : x;
+  // words keep their *hot* marks; wrap into at most two lines and shrink the font until each line fits 960 px
+  const toks = String(text).split(/(\*[^*]+\*)/).filter(Boolean).flatMap(p => p.startsWith("*") ? [{ s: str(p.replace(/\*/g, "")), hot: true }] : str(p).split(/(?<= )/).map(w => ({ s: w, hot: false })));
+  const m = /(\d+)px/.exec(cap.font); let fs = Number(m[1]); const fontAt = n => cap.font.replace(/\d+px/, n + "px");
+  const widthOf = line => line.reduce((a, w) => a + c.measureText(w.s).width, 0);
+  let lines;
+  for (;;) { c.font = fontAt(fs); const total = widthOf(toks);
+    if (total <= 960) { lines = [toks]; break; }
+    let best = 1, bestD = 1e9; for (let i = 1; i < toks.length; i++) { const d = Math.abs(widthOf(toks.slice(0, i)) - widthOf(toks.slice(i))); if (d < bestD) { bestD = d; best = i; } }
+    lines = [toks.slice(0, best), toks.slice(best)]; if (Math.max(...lines.map(widthOf)) <= 960 || fs < 40) break; fs -= 4; }
+  c.textBaseline = "middle"; const lh = fs * 1.18, y0 = cap.y - (lines.length - 1) * lh / 2;
+  c.translate(W / 2, cap.y); c.scale(.85 + .15 * k, .85 + .15 * k); c.translate(-W / 2, -cap.y); c.globalAlpha = Math.min(1, age / .15);
+  if (cap.box) { const bw = Math.max(...lines.map(widthOf)), pad = 34; c.fillStyle = cap.box; c.beginPath(); c.roundRect(W / 2 - bw / 2 - pad, y0 - lh / 2 - 10, bw + pad * 2, lh * lines.length + 20, 22); c.fill(); }
+  lines.forEach((line, li) => { const y = y0 + li * lh; let x = W / 2 - widthOf(line) / 2; c.textAlign = "left";
+    for (const w of line) {
+      if (cap.stroke) { c.lineWidth = Math.max(8, fs * .18); c.lineJoin = "round"; c.strokeStyle = cap.stroke; c.strokeText(w.s, x, y); }
+      if (cap.glow) { c.shadowColor = "rgba(255,255,255,.8)"; c.shadowBlur = 24; }
+      c.fillStyle = w.hot ? (cap.accent || style.accent || "#e0384a") : cap.color; c.fillText(w.s, x, y); c.shadowBlur = 0; x += c.measureText(w.s).width; } });
+  c.restore();
+}
+
+// ---------- one frame ----------
+window.frame = function (t) {
+  const st = stateAt(t); pen.frame(t);
+  const cam = camNow(st, t); let sx = 0, sy = 0;
+  for (const f of st.fx) { const a = t - f.t; if ((f.name === "shake" || f.name === "boom") && a < .5) { const k = 1 - a / .5; sx += Math.sin(t * 90) * 22 * k; sy += Math.cos(t * 77) * 18 * k; } }
+  let punch = 1; for (const f of st.fx) { const a = t - f.t; if (f.name === "punch" && a < .35) punch += .08 * Math.sin(a / .35 * Math.PI); }
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, work.width, work.height); ctx.scale(1 / PX, 1 / PX);
+  ctx.save(); ctx.translate(W / 2 + sx, H / 2 + sy); ctx.scale(cam.zoom * punch, cam.zoom * punch); ctx.translate(-cam.x, -cam.y);
+  BACKGROUNDS[style.bg](pen, t, cam, { ...(style.bgOpts || {}), ...(clip.bgOpts || {}) });
+  const drawProp = p => { const s = st["p:" + p.id]; if (!s.show) return; const [x, y] = posNow(s, t); const o = { ...s.o };
+    for (const [k, a] of Object.entries(s.anim)) o[k] = lerp(a.from, a.to, ease((t - a.t0) / a.d));
+    const pop = p.pop === false ? 1 : back(Math.min(1, (t - s.showT) / .3)); ctx.save(); ctx.translate(x, y); ctx.scale(pop, pop); PROPS[p.type](pen, 0, 0, s.size, t, o); ctx.restore(); };
+  props.filter(p => !p.front).forEach(drawProp);
+  const actors = cast.filter(c => st[c.id].show).map(c => ({ c, s: st[c.id], pos: posNow(st[c.id], t) })).sort((a, b) => a.pos[1] - b.pos[1]);
+  for (const { c, s, pos } of actors) {
+    const lt = t - s.actT; const pose = (ACTIONS[s.act] || ACTIONS.idle)(lt + (c.phase || 0));
+    const talk = s.act === "talk" || s.act === "explain" ? Math.max(0, Math.sin(t * 17) * Math.sin(t * 6.3)) : 0;
+    const blink = ((t + (c.phase || 0) * 1.7) % 3.1) < .12;
+    const r = drawFigure(pen, pos[0], pos[1], s.size, c.spec, pose, s.face, { look: s.look, t, talk, blink });
+    if (s.hold && r.hand) { const [type, sz, extra] = String(s.hold).split(":"); PROPS[type](pen, r.hand[0], r.hand[1] + (type === "phone" ? -10 : 0), s.size * Number(sz || .45), t, { text: extra, ring: extra === "ring", k: 1 }); }
+    if (c.id === (clip.flashlightOn || cast[0].id)) st.__flash = [clamp((r.head[0] - cam.x) * cam.zoom + W / 2, 160, 920), clamp((r.head[1] - cam.y) * cam.zoom + H / 2, 300, 1500)];
+  }
+  props.filter(p => p.front).forEach(drawProp);
+  ctx.restore();
+  // flashes are drawn in screen space
+  for (const f of st.fx) { const a = t - f.t; if ((f.name === "flash" || f.name === "boom") && a < .3) { ctx.fillStyle = f.name === "boom" ? `rgba(255,200,120,${.8 * (1 - a / .3)})` : `rgba(255,255,255,${.85 * (1 - a / .3)})`; ctx.fillRect(0, 0, W, H); } }
+  if (PX > 1) { caption(t, st); octx.imageSmoothingEnabled = false; octx.clearRect(0, 0, W, H); octx.drawImage(work, 0, 0, W, H); finish(t, st); }
+  else { octx.clearRect(0, 0, W, H); octx.drawImage(work, 0, 0); finish(t, st); caption(t, st); }
+  const fade = Math.min(clamp(t / .2), clamp((DUR - t) / .3)); if (fade < 1) { octx.fillStyle = `rgba(0,0,0,${1 - fade})`; octx.fillRect(0, 0, W, H); }
+  return true;
+};
+window.duration = DUR; window.timeline = { duration: DUR, cuts: beats.filter(b => b.cam?.cut).map(b => ({ t: b.t, cam: "cut" })), events: [] };
+window.ready = true; window.frame(Number(q.get("t") || 1));
+window.png = async () => { window.frame(Number(q.get("t") || 1)); return out.toDataURL("image/png"); };
+</script></body></html>

@@ -1,0 +1,103 @@
+{
+ "title": "Your TV turns on at 3 AM",
+ "style": "b3-retrotv",
+ "duration": 8,
+ "cast": {
+  "me": {
+   "x": 330,
+   "size": 560,
+   "look": "right",
+   "act": "idle",
+   "face": "sleepy"
+  }
+ },
+ "props": {
+  "tv": {
+   "type": "tv",
+   "x": 800,
+   "y": 1500,
+   "size": 360,
+   "o": {
+    "k": 0,
+    "glow": true
+   }
+  },
+  "clock": {
+   "type": "clock",
+   "x": 540,
+   "y": 420,
+   "size": 260,
+   "o": {
+    "hour": 3,
+    "min": 0
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "3:00 AM."
+  },
+  {
+   "t": 1.5,
+   "anim": {
+    "tv": {
+     "k": [
+      0,
+      1,
+      0.15
+     ]
+    }
+   },
+   "do": {
+    "me": "shocked shocked right"
+   },
+   "fx": "flash",
+   "caption": "The TV turns *on*."
+  },
+  {
+   "t": 3.3,
+   "do": {
+    "me": "sneak scared right"
+   },
+   "move": {
+    "me": [
+     560,
+     1500,
+     1.6
+    ]
+   },
+   "cam": {
+    "x": 640,
+    "y": 1050,
+    "zoom": 1.2
+   },
+   "caption": "Nobody touched the remote."
+  },
+  {
+   "t": 5.4,
+   "anim": {
+    "tv": {
+     "k": [
+      1,
+      0,
+      0.1
+     ]
+    }
+   },
+   "do": {
+    "me": "scared scared right"
+   }
+  },
+  {
+   "t": 6.2,
+   "caption": "...*right*?",
+   "cam": {
+    "x": 560,
+    "y": 1000,
+    "zoom": 1.45,
+    "ease": 1.5
+   }
+  }
+ ]
+}

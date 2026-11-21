@@ -1,0 +1,99 @@
+{
+ "title": "The message you haven't answered",
+ "style": "a4-cozy",
+ "duration": 8,
+ "cast": {
+  "me": {
+   "x": 520,
+   "size": 600,
+   "act": "phone",
+   "face": "neutral",
+   "hold": "phone:.42"
+  }
+ },
+ "props": {
+  "bench": {
+   "type": "bench",
+   "x": 520,
+   "y": 1500,
+   "size": 360
+  },
+  "b1": {
+   "type": "bubble",
+   "x": 760,
+   "y": 700,
+   "size": 280,
+   "hidden": true,
+   "o": {
+    "text": "typing..."
+   }
+  },
+  "t1": {
+   "type": "thought",
+   "x": 330,
+   "y": 640,
+   "size": 300,
+   "hidden": true,
+   "o": {
+    "text": "what do I say?"
+   }
+  }
+ },
+ "beats": [
+  {
+   "t": 0,
+   "caption": "You've *read* it."
+  },
+  {
+   "t": 1.4,
+   "show": [
+    "b1"
+   ],
+   "do": {
+    "me": "phone nervous"
+   }
+  },
+  {
+   "t": 2.8,
+   "hide": [
+    "b1"
+   ],
+   "show": [
+    "t1"
+   ],
+   "do": {
+    "me": "chinRub worried"
+   },
+   "cam": {
+    "x": 520,
+    "y": 900,
+    "zoom": 1.25
+   }
+  },
+  {
+   "t": 4.4,
+   "hide": [
+    "t1"
+   ],
+   "caption": "So you *wait*.",
+   "do": {
+    "me": "phone tired"
+   }
+  },
+  {
+   "t": 5.8,
+   "hold": {
+    "me": null
+   },
+   "do": {
+    "me": "sit happy"
+   },
+   "cam": {
+    "x": 520,
+    "y": 960,
+    "zoom": 1
+   },
+   "caption": "It can wait. *You* can breathe."
+  }
+ ]
+}
