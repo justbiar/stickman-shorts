@@ -1,0 +1,14 @@
+{
+ "title": "The skyscraper built in 410 days",
+ "style": "city",
+ "script": "The Empire State Building went up in just 410 days.\n\nDuring the Great Depression, more than three thousand workers a day climbed the steel.\n\nAt its fastest, the frame rose over four floors a week.\n\nIt opened in 1931... and for almost forty years, nothing on Earth was taller.",
+ "beats": [
+  {"at": 0, "cam": "insert", "on": "tower", "push": 0.5, "rise": 2, "label": {"text": "EMPIRE STATE", "on": "tower", "dy": 14}},
+  {"at": "410", "cam": "close", "on": "worker", "do": {"worker": "talk excited right"}, "label": {"text": "410 DAYS", "on": "worker"}},
+  {"at": "during", "cam": "wide", "on": ["worker", "worker2"], "do": {"worker": "point determined right", "worker2": "hold determined right"}},
+  {"at": "climbed", "cam": "insert", "on": "frame", "push": 0.5, "rise": 1.5},
+  {"at": "fastest", "cam": "insert", "on": "frame", "orbit": 0.45, "push": 0.4, "label": {"text": "4 FLOORS A WEEK", "on": "frame", "dy": 4}},
+  {"at": "it", "cam": "low", "on": "worker", "do": {"worker": "present happy front"}, "label": {"text": "1931", "on": "worker", "for": 1.6}},
+  {"at": "nothing", "cam": "insert", "on": "tower", "push": 0.7, "rise": 4, "label": {"text": "TALLEST UNTIL 1970", "on": "tower", "dy": 12}}
+ ]
+}

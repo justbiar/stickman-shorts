@@ -1,0 +1,18 @@
+{
+ "title": "The man who got rich from the gold rush without digging",
+ "style": "goldrush",
+ "script": "In 1848, Sam Brannan heard there was gold in California.\n\nBefore telling anyone, he bought every pan, pick and shovel he could find.\n\nThen he ran through San Francisco shouting, Gold! Gold from the American River!\n\nA pan that cost him twenty cents, he sold for fifteen dollars.\n\nMost miners went home broke. Brannan became California's first millionaire.",
+ "beats": [
+  {"at": 0, "cam": "insert", "on": "street", "push": 0.5, "label": {"text": "1848", "on": "street", "dy": 1}},
+  {"at": "sam", "cam": "medium", "on": "brannan", "do": {"brannan": "think smug front"}, "label": {"text": "Sam Brannan", "on": "brannan", "for": 2}},
+  {"at": "before", "cam": "insert", "on": "pans", "push": 0.6},
+  {"at": "bought", "cam": "close", "on": "brannan", "do": {"brannan": "hold smirk front"}},
+  {"at": "then", "cam": "low", "on": "brannan", "do": {"brannan": "cheer excited front"}},
+  {"at": "gold#2", "cam": "close", "on": "brannan", "orbit": 0.3, "do": {"brannan": "cheer excited front"}},
+  {"at": "american", "cam": "medium", "on": ["miner", "miner2"], "do": {"miner": "jump excited right", "miner2": "jump excited right"}},
+  {"at": "pan#2", "cam": "insert", "on": "pans", "orbit": 0.3, "label": {"text": "20¢", "on": "pans", "dy": 0.6}},
+  {"at": "sold", "cam": "close", "on": "brannan", "do": {"brannan": "present smug front"}, "label": {"text": "$15", "on": "brannan"}},
+  {"at": "most", "cam": "medium", "on": ["miner", "miner2"], "do": {"miner": "sad sad front", "miner2": "sad sad front", "brannan": "idle smug left"}},
+  {"at": "brannan#2", "cam": "low", "on": "brannan", "do": {"brannan": "cheer happy front"}, "label": {"text": "FIRST MILLIONAIRE", "on": "brannan"}}
+ ]
+}

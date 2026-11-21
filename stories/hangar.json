@@ -1,0 +1,19 @@
+{
+ "title": "The bullet holes that fooled an army",
+ "style": "hangar",
+ "script": "In 1943, the military studied bombers that came back covered in bullet holes.\n\nThe plan was simple. Add armor where the holes are.\n\nThen a statistician named Abraham Wald said no. Put the armor where there are no holes.\n\nBecause the planes that got hit there... never came back.\n\nThe holes only showed where a plane could get shot and still survive.",
+ "beats": [
+  {"at": 0, "cam": "insert", "on": "plane", "push": 0.6, "label": {"text": "1943", "on": "plane", "dy": 1.2}},
+  {"at": "studied", "cam": "medium", "on": ["officer", "pilot"], "do": {"officer": "think thinking right", "pilot": "talk excited left"}},
+  {"at": "covered", "cam": "insert", "on": "board", "push": 0.5},
+  {"at": "plan", "cam": "medium", "on": "officer", "orbit": 0.3, "do": {"officer": "point excited right", "pilot": "idle happy left"}},
+  {"at": "add", "cam": "close", "on": "officer", "do": {"officer": "present determined front"}},
+  {"at": "then", "cam": "wide", "on": ["wald", "officer"], "show": ["wald"], "do": {"wald": "talk thinking right", "officer": "idle surprised left"}, "label": {"text": "Abraham Wald", "on": "wald", "for": 2.2}},
+  {"at": "no", "cam": "close", "on": "wald", "do": {"wald": "point determined front"}},
+  {"at": "put", "cam": "insert", "on": "board", "push": 0.4, "fx": "board2"},
+  {"at": "because", "cam": "insert", "on": "engine", "push": 0.6},
+  {"at": "never", "cam": "medium", "on": "pilot", "do": {"pilot": "sad sad front"}},
+  {"at": "only", "cam": "wide", "on": ["wald", "officer", "pilot"], "do": {"wald": "present smirk front", "officer": "idle shocked right", "pilot": "idle surprised left"}},
+  {"at": "survive", "cam": "close", "on": "wald", "orbit": -0.25, "do": {"wald": "idle smug front"}, "label": {"text": "SURVIVORSHIP BIAS", "on": "wald", "for": 2}}
+ ]
+}

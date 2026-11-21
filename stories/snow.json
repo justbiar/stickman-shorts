@@ -1,0 +1,17 @@
+{
+ "title": "Fireworks were an accident",
+ "style": "snow",
+ "script": "Over a thousand years ago, Chinese alchemists were searching for a potion to live forever.\n\nThey mixed saltpeter, sulfur and charcoal.\n\nInstead of eternal life... they got gunpowder.\n\nSoon people packed it into bamboo tubes to scare away evil spirits.\n\nA recipe for living forever became the reason we light up the sky every New Year.",
+ "beats": [
+  {"at": 0, "cam": "medium", "on": "alchemist", "do": {"alchemist": "stir thinking right"}, "label": {"text": "1,000+ YEARS AGO", "on": "alchemist", "for": 2.4}},
+  {"at": "potion", "cam": "close", "on": "alchemist", "do": {"alchemist": "hold excited front"}},
+  {"at": "mixed", "cam": "insert", "on": "table", "push": 0.5, "do": {"alchemist": "stir determined right"}},
+  {"at": "instead", "cam": "close", "on": "alchemist", "orbit": 0.3, "do": {"alchemist": "stir determined right"}},
+  {"at": "gunpowder", "cam": "insert", "on": "bowl", "fx": "boom", "do": {"alchemist": "jump shocked front"}},
+  {"at": "soon", "cam": "wide", "on": ["alchemist", "kid"], "show": ["kid"], "do": {"alchemist": "shrug surprised front", "kid": "cheer excited front"}, "fx": "firework"},
+  {"at": "spirits", "cam": "insert", "on": "sky", "push": 0.4, "fx": "firework"},
+  {"at": "recipe", "cam": "close", "on": "alchemist", "do": {"alchemist": "present smirk front"}},
+  {"at": "light", "cam": "insert", "on": "sky", "orbit": 0.2, "fx": "firework"},
+  {"at": "new", "cam": "low", "on": "kid", "do": {"kid": "cheer happy front"}, "fx": "firework"}
+ ]
+}

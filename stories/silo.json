@@ -1,0 +1,18 @@
+{
+ "title": "Why a silo can explode",
+ "style": "silo",
+ "script": "The most dangerous thing on a farm might be dust.\n\nGrain dust floating in the air can explode like gunpowder.\n\nIn 1878, flour dust inside a mill in Minneapolis caught a spark. The blast flattened the building and killed eighteen workers.\n\nThat's why grain elevators have strict rules about sparks.\n\nA silo full of corn... can be a bomb.",
+ "beats": [
+  {"at": 0, "cam": "medium", "on": "farmer", "do": {"farmer": "talk thinking front"}},
+  {"at": "dust", "cam": "insert", "on": "dust", "push": 0.5},
+  {"at": "grain", "cam": "close", "on": "farmer", "do": {"farmer": "point determined left"}},
+  {"at": "explode", "cam": "insert", "on": "dust", "orbit": 0.3, "label": {"text": "EXPLOSIVE", "on": "dust", "bg": "#e0483a", "fg": "#ffffff"}},
+  {"at": "in#2", "cam": "medium", "on": ["farmer", "hand"], "show": ["hand"], "do": {"farmer": "talk thinking front", "hand": "idle surprised left"}, "label": {"text": "1878 · MINNEAPOLIS", "on": "farmer", "for": 2.4}},
+  {"at": "caught", "cam": "insert", "on": "silo", "push": 0.5},
+  {"at": "blast", "cam": "insert", "on": "silo", "orbit": 0.2, "fx": "boom"},
+  {"at": "killed", "cam": "medium", "on": ["farmer", "hand"], "do": {"farmer": "sad sad front", "hand": "sad sad front"}, "label": {"text": "18 WORKERS", "on": "farmer"}},
+  {"at": "that's", "cam": "close", "on": "farmer", "do": {"farmer": "point determined front"}},
+  {"at": "silo", "cam": "low", "on": "farmer", "do": {"farmer": "present smirk front", "hand": "idle shocked left"}},
+  {"at": "bomb", "cam": "insert", "on": "silo", "push": 0.6, "fx": "shake"}
+ ]
+}

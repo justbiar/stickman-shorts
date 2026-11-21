@@ -1,0 +1,18 @@
+{
+ "title": "They rang bells to stop lightning",
+ "style": "piazza",
+ "script": "For centuries, people in Europe rang church bells during thunderstorms.\n\nThey believed the sound would drive the lightning away.\n\nIt did the opposite. The tall towers attracted lightning, and the ringer was holding a wet rope.\n\nOne report counted 386 strikes on church towers in Germany over 33 years. 103 bell ringers were killed.\n\nEventually, many places banned it.",
+ "beats": [
+  {"at": 0, "cam": "insert", "on": "tower", "push": 0.5, "rise": 2},
+  {"at": "rang", "cam": "insert", "on": "bell", "push": 0.6, "fx": "ring"},
+  {"at": "thunderstorms", "cam": "insert", "on": "bell", "orbit": 0.4, "fx": "lightning"},
+  {"at": "believed", "cam": "medium", "on": ["villager", "priest"], "show": ["priest"], "do": {"villager": "talk happy right", "priest": "think thinking left"}},
+  {"at": "opposite", "cam": "close", "on": "villager", "do": {"villager": "shrug shocked front"}},
+  {"at": "tall", "cam": "insert", "on": "tower", "push": 0.4, "fx": "lightning"},
+  {"at": "ringer", "cam": "insert", "on": "rope", "push": 0.5, "do": {"ringer": "hold surprised right"}},
+  {"at": "wet", "cam": "medium", "on": "ringer", "do": {"ringer": "hold shocked front"}, "fx": "lightning"},
+  {"at": "one", "cam": "wide", "on": ["villager", "priest"], "do": {"villager": "think thinking right", "priest": "point determined left"}, "label": {"text": "386 STRIKES", "on": "villager"}},
+  {"at": "103", "cam": "medium", "on": "ringer", "orbit": -0.3, "do": {"ringer": "sad sad front"}, "label": {"text": "103 RINGERS", "on": "ringer"}},
+  {"at": "eventually", "cam": "close", "on": "priest", "do": {"priest": "point determined front"}, "label": {"text": "BANNED", "on": "priest", "bg": "#e0483a", "fg": "#ffffff"}}
+ ]
+}
