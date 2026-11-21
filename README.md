@@ -2,16 +2,31 @@
 
 Short vertical history videos with flat round-head characters standing in stylized 3D worlds, made with three.js in the browser and rendered to mp4 frame by frame. No video editor, no After Effects: a story file, a voiceover and one command.
 
-Six worlds come with it:
+![Frames from the six example shorts](docs/preview.jpg)
 
-| set | look | example story |
+## Watch the examples
+
+Every video below was made by this repo, start to finish, from the story files in `stories/`.
+
+| set | look | short |
 |---|---|---|
-| `hangar` | WWII hangar, sunny airfield, bomber, bullet-hole board | Survivorship bias, 1943 |
-| `goldrush` | 1849 boomtown at golden hour, dust in the air | Sam Brannan sells the shovels |
-| `city` | blue-hour avenue, lit towers, a steel frame going up | The Empire State Building in 410 days |
-| `piazza` | Italian square in a storm, bell tower, rain, lightning | Ringing bells to stop lightning |
-| `snow` | winter night, lanterns, an alchemist's table, fireworks | Gunpowder was an accident |
-| `silo` | farm at sunset, grain silos, a dust explosion | Why a silo can explode |
+| `hangar` | WWII hangar, sunny airfield, bomber, bullet-hole board | [The Bullet Holes That Fooled an Army](https://youtube.com/shorts/DrN5xv5VyVc) |
+| `goldrush` | 1849 boomtown at golden hour, dust in the air | [He Got Rich From the Gold Rush Without Digging](https://youtube.com/shorts/3HRw8G3LxJA) |
+| `city` | blue-hour avenue, lit towers, a steel frame going up | [The Skyscraper Built in Just 410 Days](https://youtube.com/shorts/nwoKeM-Ed9A) |
+| `piazza` | Italian square in a storm, bell tower, rain, lightning | [They Rang Church Bells to Stop Lightning](https://youtube.com/shorts/zwi8hEw3dy0) |
+| `snow` | winter night, lanterns, an alchemist's table, fireworks | [Fireworks Started as a Search for Immortality](https://youtube.com/shorts/lk3Lqr38JEM) |
+| `silo` | farm at sunset, grain silos, a dust explosion | [Why a Silo Full of Corn Can Explode](https://youtube.com/shorts/ZNJsdTR8ykU) |
+
+## Quick start
+
+```sh
+git clone https://github.com/justbiar/stickman-shorts && cd stickman-shorts
+pip install mlx-whisper                       # word timings (Apple Silicon)
+mkdir voice && cp ~/my-voiceover.mp3 voice/hangar.mp3
+tools/make.sh hangar                          # -> out/hangar.mp4
+```
+
+`make.sh` starts a small local web server, gets the word timings, renders the frames in headless Chrome and mixes the sound. Add a music file and a folder of sound effects as the second and third arguments if you want them.
 
 ## How a short is made
 
