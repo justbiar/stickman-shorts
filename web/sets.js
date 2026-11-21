@@ -195,4 +195,56 @@ export const SETS = {
         const f = Math.max(0, 1 - d / 3.5), hot = Math.max(0, 1 - d * 1.5); fc.set([(1.4 + 1.6 * hot) * f, (.6 + 1.6 * hot) * f, (.2 + 1.2 * hot) * f], i * 3); });
       fp.needsUpdate = true; fire.geometry.attributes.color.needsUpdate = true; bl.intensity = d < 3 ? 400 * Math.exp(-d * 1.6) : 0; return d < .25 ? "flash" : null; } };
   },
+  siloIn(k) {   // inside a grain bin: corrugated blue steel, rusty seams, cracked grain crust, lamps, a daylight beam from a high hatch
+    const { THREE, scene, M, box, add, glow, tex, rnd, photo, model } = k; const R = 7, H = 11;
+    scene.background = new THREE.Color(0x10141c); scene.fog = new THREE.FogExp2(0x2a3448, .016);
+    const wallM = photo("corrugated_iron_02", [16, 3], { tint: 0x9ab8ff, side: THREE.BackSide, metal: 0, bump: 1.2 });
+    const wall = add(new THREE.Mesh(new THREE.CylinderGeometry(R, R, H, 96, 1, true), wallM)); wall.position.y = H / 2;
+    const roofM = new THREE.MeshStandardMaterial({ color: 0x4a5468, metalness: .15, roughness: .6, side: THREE.BackSide });
+    const roof = add(new THREE.Mesh(new THREE.ConeGeometry(R, 3.2, 96, 1, true), roofM)); roof.position.y = H + 1.6;
+    const beamM = M({ color: 0x1e2228, metalness: .6, roughness: .45 }), rustM = M({ color: 0x6a3418, metalness: .3, roughness: .8 });
+    for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2, b = box(R, .2, .12, beamM, Math.cos(a) * R / 2, H + 1.5, Math.sin(a) * R / 2); b.rotation.set(0, -a, Math.atan2(3.2, R)); }
+    for (let j = 0; j < 9; j++) { const t = add(new THREE.Mesh(new THREE.TorusGeometry(R - .06, .03, 6, 128), rustM)); t.rotation.x = Math.PI / 2; t.position.y = .9 + j * 1.15; }
+    for (let i = 0; i < 24; i++) { const a = i / 24 * Math.PI * 2; box(.09, H, .09, beamM, Math.cos(a) * (R - .1), H / 2, Math.sin(a) * (R - .1)); }
+    const paperM = M({ color: 0xece8de, roughness: .9 });
+    for (const [a, y] of [[-2.1, 3.2], [-1.75, 4.6], [-1.2, 3.8], [-2.6, 2.7], [-.75, 4.2], [-2.95, 3.9]]) { const n = new THREE.Mesh(new THREE.PlaneGeometry(.72, .52), paperM); n.position.set(Math.cos(a) * (R - .14), y, Math.sin(a) * (R - .14)); n.lookAt(0, y, 0); scene.add(n); }
+    // cracked grain crust: golden speckle with Voronoi crack lines, painted once into a canvas
+    const pts = []; for (let i = 0; i < 70; i++) pts.push([rnd() * 1024, rnd() * 1024]);
+    const crust = tex(1024, 1024, (g, w, h) => { const img = g.createImageData(w, h), d = img.data;
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { let d1 = 1e9, d2 = 1e9; for (const [px, py] of pts) { let dx = Math.abs(x - px), dy = Math.abs(y - py); dx = Math.min(dx, w - dx); dy = Math.min(dy, h - dy); const q = dx * dx + dy * dy; if (q < d1) { d2 = d1; d1 = q; } else if (q < d2) d2 = q; }
+        const edge = Math.sqrt(d2) - Math.sqrt(d1), crack = edge < 2.2 ? .35 : edge < 5 ? .75 : 1, n = .88 + rnd() * .2, i = (y * w + x) * 4;
+        d[i] = 236 * n * crack; d[i + 1] = 158 * n * crack; d[i + 2] = 58 * n * crack; d[i + 3] = 255; } g.putImageData(img, 0, 0); }, [3, 3]);
+    const floorM = photo("dense_sand", [10, 10], { bump: .8 }); floorM.map = crust; floorM.roughness = 1; floorM.color = new THREE.Color(.62, .62, .62);
+    const floor = new THREE.Mesh(new THREE.CircleGeometry(R, 96), floorM); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+    // daylight hatch high on the back wall, a spot light through it and a soft visible beam
+    const wa = -Math.PI / 2 + .42, wx = Math.cos(wa) * (R - .05), wz = Math.sin(wa) * (R - .05), wy = 8.6;
+    const win = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 1.4), new THREE.MeshBasicMaterial({ color: new THREE.Color(3, 2.8, 2.4) })); win.position.set(wx, wy, wz); win.lookAt(0, wy, 0); scene.add(win);
+    const sp = new THREE.SpotLight(0xffdcaa, 160, 30, .3, .45, 1.2); sp.position.set(wx * .97, wy, wz * .97); sp.target.position.set(-.3, 0, -.3); sp.castShadow = true; sp.shadow.mapSize.set(2048, 2048); sp.shadow.bias = -.0004; scene.add(sp, sp.target);
+    const from = new THREE.Vector3(wx, wy, wz), to = new THREE.Vector3(-.3, 0, -.3), len = from.distanceTo(to);
+    const beam = new THREE.Mesh(new THREE.CylinderGeometry(.55, 2.2, len, 48, 1, true), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+      uniforms: { c: { value: new THREE.Color(1, .86, .62) } }, vertexShader: `varying vec2 v; varying vec3 n; varying vec3 p; void main(){ v = uv; n = normalize(normalMatrix*normal); vec4 mv = modelViewMatrix*vec4(position,1.); p = mv.xyz; gl_Position = projectionMatrix*mv; }`,
+      fragmentShader: `uniform vec3 c; varying vec2 v; varying vec3 n; varying vec3 p; void main(){ float rim = pow(abs(dot(n, normalize(-p))), 1.6); float a = rim * (.12 + .1*v.y) * smoothstep(0.,.12,v.y); gl_FragColor = vec4(c*a, a); }` }));
+    beam.position.copy(from).add(to).multiplyScalar(.5); beam.quaternion.setFromUnitVectors(new THREE.Vector3(0, -1, 0), to.clone().sub(from).normalize()); scene.add(beam);
+    // props and fill
+    model("ladder_sectioned_01", [-2.6, 0, -6.3], 1.6, .3); model("barrel_03", [3.6, 0, -.6], 1.1); model("barrel_03", [4.1, 0, .7], 1.2, 1); model("old_military_crate", [-3.4, 0, .3], 1.2, .4);
+    const lamps = [[-3.2, -1.2], [2.6, -2.8], [-.4, -4.6]];
+    for (const [x, z] of lamps) { model("hanging_industrial_lamp", [x, 6.1, z], 1.6); const L = new THREE.PointLight(0xffa04a, 10, 12, 1.6); L.position.set(x, 5.5, z); scene.add(L);
+      glow(new THREE.Color(1.6, 1.1, .6), .45).position.set(x, 5.55, z); box(.02, H - 6.1, .02, beamM, x, 6.1 + (H - 6.1) / 2, z); }
+    k.light({ sun: [0, 20, 8], sunColor: 0x9ab0ff, sunI: .35, sky: 0x6a84c0, groundCol: 0xa8682a, hemiI: 1.0 }); scene.add(new THREE.AmbientLight(0x5a74b8, .9));
+    k.character("farmer", { shirt: "#e8e0d0", pants: "#3b5a8a", outfit: "overalls", overalls: "#3b6ea8", hat: "straw", beard: "mustache", beardColor: "#e8e8ea", hair: "#e8e8ea", hairStyle: "bob" }, [-.85, -.6], "right");
+    k.character("hand", { shirt: "#f2c230", pants: "#2a2a30", outfit: "overalls", overalls: "#e8b020", hat: "cap", hatColor: "#2a5aa8", hair: "#6a4a32", hairStyle: "bob" }, [.95, -.3], "left");
+    k.spot("window", [wx, wy, wz], [-1.6, -3.2, 7]); k.spot("ceiling", [0, 10.5, -1], [0, -8.8, 6.5]); k.spot("floor", [0, .05, .8], [0, 1.3, 2.6]);
+    k.spot("lamp", [-3.2, 5.8, -1.2], [1.6, -.6, 2.6]); k.spot("beam", [-.2, 3.5, -2.2], [-1.8, -2.2, 8.5]);
+    // dust drifting in the light, and a dust explosion on "boom"
+    const dust = k.particles(900, .035, 0xffe2b0, { additive: true, opacity: .9 }); const dp = dust.geometry.attributes.position; const db = [];
+    for (let i = 0; i < 900; i++) { const t = rnd(); const p = from.clone().lerp(to, t); const r = (.4 + t * 1.8) * Math.sqrt(rnd()), a = rnd() * 6.28; db.push([p.x + Math.cos(a) * r, p.y, p.z + Math.sin(a) * r]); }
+    const NB = 1600, burst = k.particles(NB, .5, 0xffffff, { additive: true }); const bp = burst.geometry.attributes.position; const bc = new Float32Array(NB * 3); burst.geometry.setAttribute("color", new THREE.BufferAttribute(bc, 3)); burst.material.vertexColors = true;
+    const bd = []; for (let i = 0; i < NB; i++) { const u = rnd() * 2 - 1, a = rnd() * 6.28, s2 = Math.sqrt(1 - u * u); bd.push([s2 * Math.cos(a), Math.abs(u) * .8 + .2, s2 * Math.sin(a), rnd()]); }
+    const boomL = new THREE.PointLight(0xff8a30, 0, 40, 1.2); boomL.position.set(0, 2, -2); scene.add(boomL);
+    return { fx(t, ev) { db.forEach(([x, y, z], i) => dp.setXYZ(i, x + Math.sin(t * .7 + i) * .15, ((y - t * .25 + i * .013) % 9 + 9) % 9, z + Math.cos(t * .5 + i) * .15)); dp.needsUpdate = true;
+      const b = ev.filter(e => e.name === "boom" && t >= e.t).pop(); const d = b ? t - b.t : 9;
+      bd.forEach(([dx, dy, dz, r], i) => { if (d > 3) { bp.setXYZ(i, 0, -50, 0); return; } const s = 6.5 * (1 - Math.exp(-d * 2.4)) * (.35 + r * .65); bp.setXYZ(i, dx * s, .5 + dy * s, -2 + dz * s);
+        const f = Math.max(0, 1 - d / 3), hot = Math.max(0, 1 - d * 1.6); bc.set([(1.3 + 1.7 * hot) * f, (.55 + 1.6 * hot) * f, (.2 + 1.2 * hot) * f], i * 3); });
+      bp.needsUpdate = true; burst.geometry.attributes.color.needsUpdate = true; boomL.intensity = d < 2.5 ? 3000 * Math.exp(-d * 1.8) : 0; return d < .25 ? "flash" : null; } };
+  },
 };

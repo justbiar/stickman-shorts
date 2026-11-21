@@ -93,6 +93,26 @@ hat: fedora | cowboy | hardhat | helmet | pilot | beanie | straw | cap   (+ hatC
 
 Add a function to `SETS` in `web/sets.js`. It gets a toolkit `k` (`box`, `cyl`, `ground`, `sky`, `glow`, `tex`, `particles`, `light`, `character`, `spot` and more) and returns `{ fx(t, events) }` for anything that moves. Keep shapes simple and let the lighting do the work: a three-color sky gradient, fog in the same color family as the horizon, one strong sun for shadows, a few additive glows for lamps.
 
+## Realistic worlds: real models, photo textures, 3D characters
+
+![Silo interior: flat cards and 3D characters](docs/silo.jpg)
+
+The `siloIn` world is the step up from primitive shapes: it is built from CC0 Poly Haven assets in `web/assets/` (corrugated steel, grain and plank photo textures; glTF lamps, ladder, barrels and a crate), loaded with the player's `k.model()` and `k.photo()` helpers. A cracked grain crust is painted once into a canvas with Voronoi cells, a cone with a soft additive shader fakes the daylight beam from a high hatch, and dust drifts through it. A dust explosion fires on `"fx": "boom"`.
+
+Characters come in two looks, picked per story:
+
+- flat cards (default): the 2D round-head figures standing in the 3D world
+- `"chars3d": true`: real 3D figures from `web/char3d.js`, a lit sphere head with a painted face decal, clothed torso, tube limbs with joints, gloves, shoes and hats. They take the same actions and expressions as the 2D kit, so a story switches look with one line.
+
+| short | story file |
+|---|---|
+| Why a silo full of corn can explode, flat cards | `stories/silo-in.json` |
+| the same with 3D characters | `stories/silo-in-3d.json` |
+
+Both render in about 30 seconds for 24 seconds of video. A new short in an existing world is only a new story file; a new world is written once in `sets.js`.
+
+An earlier test built the same silo in Blender from Python (Cycles-style lighting, about 8 seconds per frame). It looked a little richer but was roughly 500 times slower, so the project stays on three.js.
+
 ## The stick library (2D)
 
 Next to the three.js worlds there is a flat 2D kit in `web/kit/`, made for quick silent shorts in 17 looks. Everything is drawn in code, frame by frame: no image generation, no voice credits.
@@ -147,6 +167,6 @@ Around 30 frames a second on an M-series Mac, so a 25 second short renders in un
 
 ## Credits
 
-three.js (MIT) is vendored in `web/`. Music and sound effects are not included; bring your own (CC0 libraries such as Freesound work well).
+three.js (MIT) is vendored in `web/`. Textures and models in `web/assets/` are CC0 from [Poly Haven](https://polyhaven.com) (corrugated_iron_02, dense_sand, brown_planks_05, hanging_industrial_lamp, ladder_sectioned_01, barrel_03, old_military_crate). Music and sound effects are not included; bring your own (CC0 libraries such as Freesound work well).
 
 MIT licensed.

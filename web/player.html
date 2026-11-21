@@ -15,6 +15,9 @@ import { BokehPass } from "./jsm/postprocessing/BokehPass.js";
 import { OutputPass } from "./jsm/postprocessing/OutputPass.js";
 import { CW, CH, drawCharacter, ACTIONS, FACES } from "./character.js";
 import { SETS } from "./sets.js";
+import { GLTFLoader } from "./jsm/loaders/GLTFLoader.js";
+import { makeChar3D } from "./char3d.js";
+import { ACTIONS as KIT_ACTIONS } from "./kit/poses.js";
 
 const W = 1080, H = 1920, q = new URLSearchParams(location.search), NAME = q.get("story") || "hangar";
 const story = await (await fetch(`../stories/${NAME}.json`)).json();
@@ -28,7 +31,7 @@ let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 21474836
 // ---------- renderer ----------
 const gl = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); gl.setSize(W, H, false); gl.setPixelRatio(1);
 gl.toneMapping = THREE.ACESFilmicToneMapping; gl.outputColorSpace = THREE.SRGBColorSpace; gl.shadowMap.enabled = true; gl.shadowMap.type = THREE.PCFSoftShadowMap;
-const scene = new THREE.Scene(); const cam = new THREE.PerspectiveCamera(40, W / H, .05, 400);
+const scene = new THREE.Scene(); const cam = new THREE.PerspectiveCamera(story.fov || 40, W / H, .05, 400);
 const comp = new EffectComposer(gl); comp.setSize(W, H); comp.addPass(new RenderPass(scene, cam));
 const bokeh = new BokehPass(scene, cam, { focus: 6, aperture: .0009, maxblur: .005 }); comp.addPass(bokeh);
 comp.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), .5, .5, .95)); comp.addPass(new OutputPass());
@@ -62,6 +65,8 @@ const light = o => { sun.position.set(...o.sun); sun.color.set(o.sunColor); sun.
 // characters: a canvas-drawn figure on a plane that turns to face the camera
 const cast = {}, spots = {};
 function character(id, c, [x, z], look = "front", show = true, scale = 1.75) {
+  if (story.chars3d) { const rig = makeChar3D(THREE, c); rig.group.position.set(x, 0, z); rig.group.visible = show; scene.add(rig.group);
+    return cast[id] = { c, rig, mesh: rig.group, act: "idle", face: "neutral", look, home: [x, z], show }; }
   const cv = document.createElement("canvas"); cv.width = CW; cv.height = CH; const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace;
   const geo = new THREE.PlaneGeometry(1.0 * scale, 1.5 * scale); geo.translate(0, .75 * scale, 0);
   const mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: t, color: new THREE.Color(.8, .8, .78), transparent: true, alphaTest: .4, toneMapped: false, side: THREE.DoubleSide }));
@@ -70,8 +75,15 @@ function character(id, c, [x, z], look = "front", show = true, scale = 1.75) {
 }
 const spot = (name, p, camOff = [0, 0, 4]) => spots[name] = { p: new THREE.Vector3(...p), cam: new THREE.Vector3(...camOff) };
 
-const k = { THREE, scene, sun, hemi, M, add, box, cyl, ground, sky, glow, tex, speckle, signTex, particles, wood, rnd, light, character, spot };
+// asset loading for sets built from real models and photo textures (assets/ = CC0 files from Poly Haven)
+const gltfL = new GLTFLoader(), texL = new THREE.TextureLoader(), pending = [];
+const model = (name, pos, scale = 1, rotY = 0) => pending.push(new Promise(res => gltfL.load(`assets/${name}/${name}_1k.gltf`, g => { const o = g.scene; o.position.set(...pos); o.scale.setScalar(scale); o.rotation.y = rotY;
+  o.traverse(m => { if (m.isMesh) { m.castShadow = m.receiveShadow = true; } }); scene.add(o); res(o); }, undefined, () => res(null))));
+const photo = (folder, rep = [1, 1], o = {}) => { const ld = (f, srgb) => { let done; pending.push(new Promise(r => done = r)); const t = texL.load(`assets/${folder}/${f}.jpg`, () => done(), undefined, () => done()); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(...rep); t.anisotropy = 8; if (srgb) t.colorSpace = THREE.SRGBColorSpace; return t; };
+  return new THREE.MeshStandardMaterial({ map: ld("Diffuse", true), normalMap: ld("nor_gl"), roughnessMap: ld("Rough"), aoMap: o.ao ? ld("AO") : null, color: o.tint ?? 0xffffff, side: o.side ?? THREE.FrontSide, metalness: o.metal ?? 0, normalScale: new THREE.Vector2(o.bump ?? 1, o.bump ?? 1) }); };
+const k = { THREE, scene, sun, hemi, M, add, box, cyl, ground, sky, glow, tex, speckle, signTex, particles, wood, rnd, light, character, spot, model, photo, gl, bloomPass: null };
 const set = SETS[story.style](k);
+await Promise.all(pending); for (let i = 0; i < 20; i++) await new Promise(r => setTimeout(r, 50));
 for (const [id, o] of Object.entries(story.cast || {})) { const ch = cast[id]; if (!ch) continue; if (o.pos) ch.home = o.pos; if (o.look) ch.look = o.look; if (o.show != null) ch.show = o.show; if (o.costume) Object.assign(ch.c, o.costume); }
 
 // ---------- timing: "at" is seconds, a word ("holes"), or the nth time a word is said ("holes#2") ----------
@@ -120,6 +132,7 @@ window.frame = function (t) {
   const b = beats.filter(x => x.t <= t).pop() || beats[0];
   for (const [id, ch] of Object.entries(cast)) { const s = st[id]; ch.mesh.visible = s.show; ch.mesh.position.set(s.pos[0], 0, s.pos[1]);
     const f = { ...FACES[s.face] }; if (s.act === "talk") f.talk = .5 + .5 * Math.sin(t * 20) * Math.sin(t * 8.4);
+    if (ch.rig) { ch.rig.update((KIT_ACTIONS[s.act] || KIT_ACTIONS.idle)(t), s.face, { t, talk: f.talk || 0, look: s.look, blink: (t + ch.home[0]) % 3.3 < .1 }); continue; }
     if ((t + ch.home[0]) % 3.3 < .1 && f.eyes === "open") f.eyes = "closed"; drawCharacter(ch.ctx, ch.c, ACTIONS[s.act](t), f, s.look); ch.t.needsUpdate = true; }
   const { pos, look } = shotAt(b, t);
   const shakeE = events.filter(e => (e.name === "boom" || e.name === "shake") && t >= e.t).pop(), sh = shakeE ? Math.max(0, 1 - (t - shakeE.t) / .7) : 0;

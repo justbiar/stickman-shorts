@@ -1,0 +1,19 @@
+{
+ "title": "Why a silo full of corn can explode",
+ "style": "siloIn",
+ "fov": 55,
+ "script": "The most dangerous thing on a farm might be dust. Grain dust floating in the air can explode like gunpowder. In 1878, flour dust inside a mill in Minneapolis caught a spark. The blast flattened the building and killed eighteen workers. That's why grain elevators have strict rules about sparks. A silo full of corn... can be a bomb.",
+ "beats": [
+  {"at": 0, "cam": "medium", "on": ["farmer", "hand"], "push": 0.5, "rise": 0.6, "do": {"farmer": "talk thinking right", "hand": "idle neutral left"}},
+  {"at": "dust", "cam": "insert", "on": "beam", "push": 0.6},
+  {"at": "grain", "cam": "close", "on": "farmer", "do": {"farmer": "point determined right"}},
+  {"at": "explode", "cam": "insert", "on": "floor", "push": 0.4, "label": {"text": "EXPLOSIVE", "on": "floor", "dy": 1.2, "bg": "#e0483a", "fg": "#ffffff"}},
+  {"at": "in#2", "cam": "medium", "on": ["farmer", "hand"], "do": {"farmer": "talk neutral right", "hand": "idle surprised left"}, "label": {"text": "1878 · MINNEAPOLIS", "on": "farmer", "for": 2.4}},
+  {"at": "caught", "cam": "insert", "on": "lamp", "push": 0.5},
+  {"at": "blast", "cam": "insert", "on": "ceiling", "fx": "boom"},
+  {"at": "killed", "cam": "medium", "on": ["farmer", "hand"], "do": {"farmer": "sad sad front", "hand": "sad sad front"}, "label": {"text": "18 WORKERS", "on": "farmer"}},
+  {"at": "that's", "cam": "close", "on": "hand", "do": {"hand": "point determined left"}},
+  {"at": "silo", "cam": "low", "on": "farmer", "do": {"farmer": "present smirk front", "hand": "idle shocked left"}},
+  {"at": "bomb", "cam": "insert", "on": "window", "push": 0.6, "fx": "shake"}
+ ]
+}
